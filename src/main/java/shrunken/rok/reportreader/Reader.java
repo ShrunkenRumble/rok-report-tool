@@ -39,7 +39,31 @@ public class Reader {
         return step;
     }
 
-    public List<List<Integer>> extract(String fileName) {
+    public ReportGroup compileReports(List<List<Integer>> data, List<List<String>> cmdrs) {
+        ReportGroup reportGroup = new ReportGroup();
+
+        boolean isMulti = cmdrs.get(0).size() == 4 ? false : true;
+
+        if (!isMulti) {
+            Report report = new Report();
+            report.selfInitUnits(data.get(0).get(1), data.get(0).get(0));
+            report.setHealing(data.get(1).get(1), data.get(1).get(0));
+            report.setDead(data.get(2).get(1), data.get(2).get(0));
+            report.setSevWound(data.get(3).get(1), data.get(3).get(0));
+            report.setSlightWound(data.get(4).get(1), data.get(4).get(0));
+            report.setRemaining(data.get(5).get(3), data.get(5).get(2));
+            report.setPower(data.get(6).get(1), data.get(6).get(0));
+            report.setKP(data.get(7).get(1), data.get(7).get(0));
+            report.setSelfCmdrs(cmdrs.get(0).get(0), cmdrs.get(1).get(0));
+            report.setOppCmdrs(cmdrs.get(0).get(2), cmdrs.get(1).get(2));
+        } else {
+
+        }
+
+        return reportGroup;
+    }
+
+    public List<List<String>> extractData(String fileName) {
         final int numTerms = 10;
         int[] matchIndices = new int[numTerms];
 
@@ -60,7 +84,6 @@ public class Reader {
         for (int i = 0; i < numTerms; i++) {
             hexStrings.add(new ArrayList<>());
         }
-        List<List<Integer>> data = new ArrayList<>();
 
         try (FileInputStream fileInputStream = new FileInputStream(fileName)) {
             int character;
@@ -84,7 +107,7 @@ public class Reader {
                                 }
 
                             } else {
-                                System.out.println("Could not read the 4 bytes following 'BadHurt'.");
+                                System.out.println("Could not read the 4 bytes.");
                             }
                             matchIndices[i] = 0;
                         }
@@ -97,7 +120,68 @@ public class Reader {
             e.printStackTrace();
         }
 
+        // Decode Data
+        List<List<Integer>> data = new ArrayList<>();
+        for (int i = 0; i < numTerms-2; i++) {
+            data.add(new ArrayList<>());
+        }
+        List<List<String>> cmdrs = new ArrayList<>();
+        cmdrs.add(new ArrayList<>());
+        cmdrs.add(new ArrayList<>());
+
         for (int i = 0; i < numTerms; i++) {
+            for (int j = 0; j < hexStrings.get(i).size(); j++) {
+                if (i == 6) {
+                    data.get(i).add(100);
+                } else if (i == 8) {
+                    cmdrs.get(1).add(hexStrings.get(i).get(j));
+                } else if (i == 9) {
+                    cmdrs.get(0).add(hexStrings.get(i).get(j));
+                } else {
+                    data.get(i).add(decodeNumeric(hexStrings.get(i).get(j)));
+                }
+            }
+        }
+        /*
+        for (int i = 0; i < numTerms-2; i++) {
+            for (int j = 0; j < data.get(i).size(); j++) {
+                System.out.print(data.get(i).get(j) + " ");
+            }
+            System.out.println();
+        }
+        */
+
+        for (int i = 0; i < numTerms; i++) {
+            if (i == 0) {
+                System.out.print("Units: ");
+            }
+            if (i == 1) {
+                System.out.print("Healing: ");
+            }
+            if (i == 2) {
+                System.out.print("Dead: ");
+            }
+            if (i == 3) {
+                System.out.print("Sev Wound: ");
+            }
+            if (i == 4) {
+                System.out.print("Slight Wound: ");
+            }
+            if (i == 5) {
+                System.out.print("Remaining: ");
+            }
+            if (i == 6) {
+                System.out.print("Power: ");
+            }
+            if (i == 7) {
+                System.out.print("KP: ");
+            }
+            if (i == 8) {
+                System.out.print("HId2: ");
+            }
+            if (i == 9) {
+                System.out.print("HId: ");
+            }
             for (int j = 0; j < hexStrings.get(i).size(); j++) {
                 if (i != 6 && i != 8 && i != 9) {
                     System.out.print(decodeNumeric(hexStrings.get(i).get(j)) + " ");
@@ -108,11 +192,12 @@ public class Reader {
             System.out.println();
         }
 
-        return data;
+        return hexStrings;
     }
 
     public static void main(String[] args) {
         Reader reader = new Reader();
-        reader.extract("Report_2.126292588170875758623");
+        //reader.extractData("Report_2.126292588170875758623");
+        reader.extractData("test_2b.77597268171057404131");
     }
 }
