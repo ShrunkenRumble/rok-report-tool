@@ -46,7 +46,7 @@ public class Reader {
 
         if (!isMulti) {
             Report report = new Report();
-            report.selfInitUnits(data.get(0).get(1), data.get(0).get(0));
+            report.setInitUnits(data.get(0).get(1), data.get(0).get(0));
             report.setHealing(data.get(1).get(1), data.get(1).get(0));
             report.setDead(data.get(2).get(1), data.get(2).get(0));
             report.setSevWound(data.get(3).get(1), data.get(3).get(0));
@@ -56,8 +56,14 @@ public class Reader {
             report.setKP(data.get(7).get(1), data.get(7).get(0));
             report.setSelfCmdrs(cmdrs.get(0).get(0), cmdrs.get(1).get(0));
             report.setOppCmdrs(cmdrs.get(0).get(2), cmdrs.get(1).get(2));
+            reportGroup.addReport(report);
         } else {
+            int numReports = (cmdrs.get(0).size() / 2) - 1;
+            Report report;
+            for (int i = 0; i < numReports; i++) {
+                report = new Report();
 
+            }
         }
 
         return reportGroup;
@@ -198,6 +204,8 @@ public class Reader {
     public static void main(String[] args) {
         Reader reader = new Reader();
         //reader.extractData("Report_2.126292588170875758623");
-        reader.extractData("test_2b.77597268171057404131");
+        //reader.extractData("test_2b.77597268171057404131");
+        //reader.extractData("test_3.98785259171110544431");
+        reader.extractData("test_4.98798611171110585131");
     }
 }

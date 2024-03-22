@@ -62,7 +62,7 @@ public class Report {
         this.oppCmdrs.setSecond(cmdr2);
     }
 
-    public void selfInitUnits(int selfInitUnits, int oppInitUnits) {
+    public void setInitUnits(int selfInitUnits, int oppInitUnits) {
         this.initUnits.setFirst(selfInitUnits);
         this.initUnits.setSecond(oppInitUnits);
     }
