@@ -10,6 +10,13 @@ public class ReportGroup {
         reports = new ArrayList<Report>();
     }
 
+    public void printReportGroup() {
+        for (int i = 0; i < reports.size(); i++) {
+            reports.get(i).printReport();
+            System.out.println("---------------------------------------------------");
+        }
+    }
+
     public void addReport(Report report) {
         this.reports.add(report);
     }

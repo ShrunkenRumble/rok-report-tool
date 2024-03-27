@@ -52,6 +52,17 @@ public class Report {
         this.kp = new Pair<Integer, Integer>(selfKP, oppKP);;
     }
 
+    public void printReport() {
+        System.out.println(String.format("My Units: %d, Opp Units: %d", initUnits.getFirst(), initUnits.getSecond()));
+        System.out.println(String.format("My Healing: %d, Opp Healing: %d", healing.getFirst(), healing.getSecond()));
+        System.out.println(String.format("My Dead: %d, Opp Dead: %d", dead.getFirst(), dead.getSecond()));
+        System.out.println(String.format("My SevWound: %d, Opp SevWound: %d", sevWound.getFirst(), sevWound.getSecond()));
+        System.out.println(String.format("My SlightWound: %d, Opp SlightWound: %d", slightWound.getFirst(), slightWound.getSecond()));
+        System.out.println(String.format("My Remaining: %d, Opp Remaining: %d", remaining.getFirst(), remaining.getSecond()));
+        System.out.println(String.format("My Power: %d, Opp Power: %d", power.getFirst(), power.getSecond()));
+        System.out.println(String.format("My KP: %d, Opp KP: %d", kp.getFirst(), kp.getSecond()));
+    }
+
     public void setSelfCmdrs(String cmdr1, String cmdr2) {
         this.selfCmdrs.setFirst(cmdr1);
         this.selfCmdrs.setSecond(cmdr2);

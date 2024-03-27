@@ -39,51 +39,66 @@ public class Reader {
         return step;
     }
 
-    public ReportGroup compileReports(List<List<Integer>> data, List<List<String>> cmdrs) {
+    public ReportGroup extractReports(String filename) {
         ReportGroup reportGroup = new ReportGroup();
+        List<List<String>> hexStrings = extractHex(filename);
 
-        boolean isMulti = cmdrs.get(0).size() == 4 ? false : true;
-
-        if (!isMulti) {
-            Report report = new Report();
-            report.setInitUnits(data.get(0).get(1), data.get(0).get(0));
-            report.setHealing(data.get(1).get(1), data.get(1).get(0));
-            report.setDead(data.get(2).get(1), data.get(2).get(0));
-            report.setSevWound(data.get(3).get(1), data.get(3).get(0));
-            report.setSlightWound(data.get(4).get(1), data.get(4).get(0));
-            report.setRemaining(data.get(5).get(3), data.get(5).get(2));
-            report.setPower(data.get(6).get(1), data.get(6).get(0));
-            report.setKP(data.get(7).get(1), data.get(7).get(0));
-            report.setSelfCmdrs(cmdrs.get(0).get(0), cmdrs.get(1).get(0));
-            report.setOppCmdrs(cmdrs.get(0).get(2), cmdrs.get(1).get(2));
+        int numReports = (hexStrings.get(9).size() / 2) - 1;
+        Report report;
+        for (int i = 0; i < numReports; i++) {
+            report = new Report();
+            report.setInitUnits(
+                decodeNumeric(hexStrings.get(0).get(1+(i*2))),
+                decodeNumeric(hexStrings.get(0).get(i*2)));
+            report.setHealing(
+                decodeNumeric(hexStrings.get(1).get(1+(i*2))),
+                decodeNumeric(hexStrings.get(1).get(i*2)));
+            report.setDead(
+                decodeNumeric(hexStrings.get(2).get(1+(i*2))),
+                decodeNumeric(hexStrings.get(2).get(i*2)));
+            report.setSevWound(
+                decodeNumeric(hexStrings.get(3).get(1+(i*2))),
+                decodeNumeric(hexStrings.get(3).get(i*2)));
+            report.setSlightWound(
+                decodeNumeric(hexStrings.get(4).get(1+(i*2))),
+                decodeNumeric(hexStrings.get(4).get(i*2)));
+            report.setRemaining(
+                decodeNumeric(hexStrings.get(5).get(1+(i*2))),
+                decodeNumeric(hexStrings.get(5).get(i*2)));
+            report.setPower(
+                decodePower(hexStrings.get(6).get(1+(i*2))),
+                decodePower(hexStrings.get(6).get(i*2)));
+            report.setKP(
+                decodeNumeric(hexStrings.get(7).get(1+(i*2))),
+                decodeNumeric(hexStrings.get(7).get(i*2)));
+            report.setSelfCmdrs(
+                hexStrings.get(9).get(0),
+                hexStrings.get(8).get(0));
+            report.setOppCmdrs(
+                hexStrings.get(9).get(2+(i*2)),
+                hexStrings.get(8).get(2+(i*2)));
             reportGroup.addReport(report);
-        } else {
-            int numReports = (cmdrs.get(0).size() / 2) - 1;
-            Report report;
-            for (int i = 0; i < numReports; i++) {
-                report = new Report();
-
-            }
         }
 
+        reportGroup.printReportGroup();
         return reportGroup;
     }
 
-    public List<List<String>> extractData(String fileName) {
+    public List<List<String>> extractHex(String fileName) {
         final int numTerms = 10;
         int[] matchIndices = new int[numTerms];
 
         byte[][] searchTerms = {
-                { 0x00, 0x4D, 0x61, 0x78 },                                 // Max = Initial Units
-                { 0x48, 0x65, 0x61, 0x6C, 0x69, 0x6E, 0x67 },               // Healing
-                { 0x44, 0x65, 0x61, 0x74, 0x68 },                           // Death
-                { 0x42, 0x61, 0x64, 0x48, 0x75, 0x72, 0x74 },               // BadHurt
-                { 0x00, 0x48, 0x75, 0x72, 0x74 },                           // Hurt
-                { 0x00, 0x43, 0x6E, 0x74 },                                 // Cnt = Remaining Troops
-                { 0x00, 0x50, 0x6F, 0x77, 0x65, 0x72 },                     // Power
-                { 0x4B, 0x69, 0x6C, 0x6C, 0x53, 0x63, 0x6F, 0x72, 0x65 },   // KillScore
-                { 0x48, 0x49, 0x64, 0x32 },                                 // HId2
-                { 0x48, 0x49, 0x64, 0x03 }                                  // HId
+            { 0x00, 0x4D, 0x61, 0x78, 0x03 },                                       // Max = Initial Units
+            { 0x00, 0x48, 0x65, 0x61, 0x6C, 0x69, 0x6E, 0x67, 0x03 },               // Healing
+            { 0x00, 0x44, 0x65, 0x61, 0x74, 0x68, 0x03 },                           // Death
+            { 0x00, 0x42, 0x61, 0x64, 0x48, 0x75, 0x72, 0x74, 0x03 },               // BadHurt
+            { 0x00, 0x48, 0x75, 0x72, 0x74, 0x03 },                                 // Hurt
+            { 0x00, 0x47, 0x74, 0x4D, 0x61, 0x78, 0x03 },                           // GtMax ... Cnt = Remaining
+            { 0x00, 0x50, 0x6F, 0x77, 0x65, 0x72, 0x03 },                           // Power
+            { 0x00, 0x4B, 0x69, 0x6C, 0x6C, 0x53, 0x63, 0x6F, 0x72, 0x65, 0x03 },   // KillScore
+            { 0x00, 0x48, 0x49, 0x64, 0x32, 0x03 },                                 // HId2
+            { 0x00, 0x48, 0x49, 0x64, 0x03 }                                        // HId
         };
 
         List<List<String>> hexStrings = new ArrayList<>();
@@ -97,8 +112,8 @@ public class Reader {
                 for (int i = 0; i < numTerms; i++) {
                     if (character == (searchTerms[i][matchIndices[i]] & 0xFF)) {
                         if (++matchIndices[i] == searchTerms[i].length) {
-                            if (i != 9) {
-                                fileInputStream.skip(1);
+                            if (i == 5) {
+                                fileInputStream.skip(17);
                             }
                             byte[] buffer = new byte[4];
                             if (fileInputStream.read(buffer) == 4) {
@@ -126,37 +141,7 @@ public class Reader {
             e.printStackTrace();
         }
 
-        // Decode Data
-        List<List<Integer>> data = new ArrayList<>();
-        for (int i = 0; i < numTerms-2; i++) {
-            data.add(new ArrayList<>());
-        }
-        List<List<String>> cmdrs = new ArrayList<>();
-        cmdrs.add(new ArrayList<>());
-        cmdrs.add(new ArrayList<>());
-
-        for (int i = 0; i < numTerms; i++) {
-            for (int j = 0; j < hexStrings.get(i).size(); j++) {
-                if (i == 6) {
-                    data.get(i).add(100);
-                } else if (i == 8) {
-                    cmdrs.get(1).add(hexStrings.get(i).get(j));
-                } else if (i == 9) {
-                    cmdrs.get(0).add(hexStrings.get(i).get(j));
-                } else {
-                    data.get(i).add(decodeNumeric(hexStrings.get(i).get(j)));
-                }
-            }
-        }
         /*
-        for (int i = 0; i < numTerms-2; i++) {
-            for (int j = 0; j < data.get(i).size(); j++) {
-                System.out.print(data.get(i).get(j) + " ");
-            }
-            System.out.println();
-        }
-        */
-
         for (int i = 0; i < numTerms; i++) {
             if (i == 0) {
                 System.out.print("Units: ");
@@ -197,15 +182,15 @@ public class Reader {
             }
             System.out.println();
         }
-
+        */
         return hexStrings;
     }
 
     public static void main(String[] args) {
         Reader reader = new Reader();
-        //reader.extractData("Report_2.126292588170875758623");
-        //reader.extractData("test_2b.77597268171057404131");
-        //reader.extractData("test_3.98785259171110544431");
-        reader.extractData("test_4.98798611171110585131");
+        //reader.extractReports("test_1.77586448171057379031");
+        //reader.extractReports("test_2.5100208171152867331");
+        //reader.extractReports("test_3.98785259171110544431");
+        reader.extractReports("test_4.98798611171110585131");
     }
 }
