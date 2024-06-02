@@ -30,7 +30,7 @@ public class Reader {
         long decNum = Long.parseLong(hexStr, 16);
         long base = 1072693248L;
         long increment = 1048576L;
-        int step = 1;
+        int cnt = 1;
 
         if (decNum == 0) {
             return 0;
@@ -38,12 +38,12 @@ public class Reader {
 
         while (base < decNum) {
             base += increment;
-            step += 1;
-            if ((step & (step - 1)) == 0) {
+            cnt += 1;
+            if ((cnt & (cnt - 1)) == 0) {
                 increment = increment / 2;
             }
         }
-        return step;
+        return cnt;
     }
 
     private List<List<String>> extractHex(String fileName) {
@@ -105,8 +105,8 @@ public class Reader {
         return hexStrings;
     }
 
-    public ReportGroup extractReports(String filename) {
-        ReportGroup reportGroup = new ReportGroup();
+    public MultiReport extractReports(String filename) {
+        MultiReport reportGroup = new MultiReport();
         List<List<String>> hexStrings = extractHex(filename);
         int numReports = (hexStrings.get(9).size() / 2) - 1;
         Map<String, String> hIDMap = new HashMap<String, String>();
@@ -165,11 +165,21 @@ public class Reader {
         return reportGroup;
     }
 
+    /*  Information to scrape:
+            Skill Levels
+            Player names
+            Player IDs
+            Report Data/Time
+            Equipment
+            Armamemts
+    */
     public static void main(String[] args) {
         Reader reader = new Reader();
         //reader.extractReports("test_1.77586448171057379031");
         //reader.extractReports("test_2.5100208171152867331");
         //reader.extractReports("test_3.98785259171110544431");
-        reader.extractReports("test_4.98798611171110585131");
+        //reader.extractReports("test_4.98798611171110585131");
+        //reader.extractReports("Persistent.Mail.20240523_165632_6044165171648339223");
+        reader.extractReports("Persistent.Mail.20240523_173145_6131792171648550523");
     }
 }
