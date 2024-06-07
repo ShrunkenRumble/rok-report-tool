@@ -1,49 +1,32 @@
 package shrunken.rok.reportreader;
 
-import shrunken.rok.reportreader.Report;
+import shrunken.util.Decoder;
 
-import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
-import java.io.FileReader;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Scanner;
+import tech.tablesaw.api.*;
+
 
 public class Reader {
+    private Table reportLog;
 
-    public Reader() {}
-
-    private int decodePower(String hexStr) {
-        return 0;
-    }
-
-    private String decodeHeroID(String hexStr, Map<String, String> hIDMap) {
-        return hIDMap.get(hexStr) == null ? hexStr : hIDMap.get(hexStr);
-    }
-
-    private int decodeNumeric(String hexStr) {
-        long decNum = Long.parseLong(hexStr, 16);
-        long base = 1072693248L;
-        long increment = 1048576L;
-        int cnt = 1;
-
-        if (decNum == 0) {
-            return 0;
-        }
-
-        while (base < decNum) {
-            base += increment;
-            cnt += 1;
-            if ((cnt & (cnt - 1)) == 0) {
-                increment = increment / 2;
-            }
-        }
-        return cnt;
+    public Reader() {
+        reportLog = Table.create("Reports",
+                            StringColumn.create("MyPrimCmdr"), StringColumn.create("MySecCmdr"), IntColumn.create("MyUnits"), IntColumn.create("MyHeals"), IntColumn.create("MyDead"), IntColumn.create("MySev"),
+                                    IntColumn.create("MySlight"), IntColumn.create("MyRemaining"),
+                                    IntColumn.create("MyKP"), IntColumn.create("MyPower"),
+                                    StringColumn.create("OppPrimCmdr"), StringColumn.create("OppSecCmdr"),
+                                    IntColumn.create("OppUnits"), IntColumn.create("OppHeals"),
+                                    IntColumn.create("OppDead"), IntColumn.create("OppSev"),
+                                    IntColumn.create("OppSlight"), IntColumn.create("OppRemaining"),
+                                    IntColumn.create("OppKP"), IntColumn.create("OppPower"));
     }
 
     private List<List<String>> extractHex(String fileName) {
@@ -57,8 +40,8 @@ public class Reader {
             { 0x00, 0x42, 0x61, 0x64, 0x48, 0x75, 0x72, 0x74, 0x03 },               // BadHurt
             { 0x00, 0x48, 0x75, 0x72, 0x74, 0x03 },                                 // Hurt
             { 0x00, 0x47, 0x74, 0x4D, 0x61, 0x78, 0x03 },                           // GtMax ... Cnt = Remaining
-            { 0x00, 0x50, 0x6F, 0x77, 0x65, 0x72, 0x03 },                           // Power
             { 0x00, 0x4B, 0x69, 0x6C, 0x6C, 0x53, 0x63, 0x6F, 0x72, 0x65, 0x03 },   // KillScore
+            { 0x00, 0x50, 0x6F, 0x77, 0x65, 0x72, 0x03 },                           // Power
             { 0x00, 0x48, 0x49, 0x64, 0x32, 0x03 },                                 // HId2
             { 0x00, 0x48, 0x49, 0x64, 0x03 }                                        // HId
         };
@@ -105,8 +88,7 @@ public class Reader {
         return hexStrings;
     }
 
-    public MultiReport extractReports(String filename) {
-        MultiReport reportGroup = new MultiReport();
+    public void extractBattles(String filename) {
         List<List<String>> hexStrings = extractHex(filename);
         int numReports = (hexStrings.get(9).size() / 2) - 1;
         Map<String, String> hIDMap = new HashMap<String, String>();
@@ -121,48 +103,28 @@ public class Reader {
             }
         } catch (FileNotFoundException e) {
             e.printStackTrace();
-            return null;
+            return;
         }
 
-        // Populate report objects and add them to the report group
-        Report report;
+        // Add data from each report to the report log
         for (int i = 0; i < numReports; i++) {
-            report = new Report();
-            report.setInitUnits(
-                    decodeNumeric(hexStrings.get(0).get(1 + (i * 2))),
-                    decodeNumeric(hexStrings.get(0).get(i * 2)));
-            report.setHealing(
-                    decodeNumeric(hexStrings.get(1).get(1 + (i * 2))),
-                    decodeNumeric(hexStrings.get(1).get(i * 2)));
-            report.setDead(
-                    decodeNumeric(hexStrings.get(2).get(1 + (i * 2))),
-                    decodeNumeric(hexStrings.get(2).get(i * 2)));
-            report.setSevWound(
-                    decodeNumeric(hexStrings.get(3).get(1 + (i * 2))),
-                    decodeNumeric(hexStrings.get(3).get(i * 2)));
-            report.setSlightWound(
-                    decodeNumeric(hexStrings.get(4).get(1 + (i * 2))),
-                    decodeNumeric(hexStrings.get(4).get(i * 2)));
-            report.setRemaining(
-                    decodeNumeric(hexStrings.get(5).get(1 + (i * 2))),
-                    decodeNumeric(hexStrings.get(5).get(i * 2)));
-            report.setPower(
-                    decodePower(hexStrings.get(6).get(1 + (i * 2))),
-                    decodePower(hexStrings.get(6).get(i * 2)));
-            report.setKP(
-                    decodeNumeric(hexStrings.get(7).get(1 + (i * 2))),
-                    decodeNumeric(hexStrings.get(7).get(i * 2)));
-            report.setSelfCmdrs(
-                    decodeHeroID(hexStrings.get(9).get(0), hIDMap),
-                    decodeHeroID(hexStrings.get(8).get(0), hIDMap));
-            report.setOppCmdrs(
-                    decodeHeroID(hexStrings.get(9).get(2 + (i * 2)), hIDMap),
-                    decodeHeroID(hexStrings.get(8).get(2 + (i * 2)), hIDMap));
-            reportGroup.addReport(report);
+            reportLog.stringColumn("MyPrimCmdr").append(Decoder.getHeroID(hexStrings.get(9).get(0), hIDMap));
+            reportLog.stringColumn("MySecCmdr").append(Decoder.getHeroID(hexStrings.get(8).get(0), hIDMap));
+            reportLog.stringColumn("OppPrimCmdr").append(
+                    Decoder.getHeroID(hexStrings.get(9).get(2 + (i * 2)), hIDMap));
+            reportLog.stringColumn("OppSecCmdr").append(
+                    Decoder.getHeroID(hexStrings.get(8).get(2 + (i * 2)), hIDMap));
+            reportLog.intColumn("MyPower").append(Decoder.getPower(hexStrings.get(6).get(1 + (i * 2))));
+            reportLog.intColumn("OppPower").append(Decoder.getPower(hexStrings.get(6).get(i * 2)));
+            for (int j = 0; j < 7; j++) {
+                reportLog.intColumn(j+2).append(Decoder.getNumeric(hexStrings.get(j).get(1 + (i * 2))));
+                reportLog.intColumn(j+12).append(Decoder.getNumeric(hexStrings.get(j).get(i * 2)));
+            }
         }
+    }
 
-        reportGroup.printReportGroup();
-        return reportGroup;
+    public void printTable() {
+        System.out.println(reportLog.print());
     }
 
     /*  Information to scrape:
@@ -174,12 +136,24 @@ public class Reader {
             Armamemts
     */
     public static void main(String[] args) {
+
         Reader reader = new Reader();
-        //reader.extractReports("test_1.77586448171057379031");
-        //reader.extractReports("test_2.5100208171152867331");
-        //reader.extractReports("test_3.98785259171110544431");
-        //reader.extractReports("test_4.98798611171110585131");
-        //reader.extractReports("Persistent.Mail.20240523_165632_6044165171648339223");
-        reader.extractReports("Persistent.Mail.20240523_173145_6131792171648550523");
+
+        String DIRECTORY_PATH = "C:\\Users\\deval\\Desktop\\ROK\\rok-report-tool\\reports";
+
+        File folder = new File(DIRECTORY_PATH);
+        File[] listOfFiles = folder.listFiles();
+
+        if (listOfFiles != null) {
+            for (File file : listOfFiles) {
+                if (file.isFile()) {
+                    System.out.println(file.getName());
+                    reader.extractBattles(file.getPath());
+                }
+            }
+        } else {
+            System.out.println("No files found or folder does not exist.");
+        }
+        reader.printTable();
     }
 }
