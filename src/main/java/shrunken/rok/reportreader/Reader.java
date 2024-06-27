@@ -26,7 +26,7 @@ public class Reader {
                                     IntColumn.create("OppUnits"), IntColumn.create("OppHeals"),
                                     IntColumn.create("OppDead"), IntColumn.create("OppSev"),
                                     IntColumn.create("OppSlight"), IntColumn.create("OppRemaining"),
-                                    IntColumn.create("OppKP"), IntColumn.create("OppPower"));
+                                    IntColumn.create("OppKP"), IntColumn.create("OppPower"), StringColumn.create("ID"));
     }
 
     private List<List<String>> extractHex(String fileName) {
@@ -88,7 +88,7 @@ public class Reader {
         return hexStrings;
     }
 
-    public void extractBattles(String filename) {
+    public void extractData(String filename, String reportID) {
         List<List<String>> hexStrings = extractHex(filename);
         int numReports = (hexStrings.get(9).size() / 2) - 1;
         Map<String, String> hIDMap = new HashMap<String, String>();
@@ -120,6 +120,7 @@ public class Reader {
                 reportLog.intColumn(j+2).append(Decoder.getNumeric(hexStrings.get(j).get(1 + (i * 2))));
                 reportLog.intColumn(j+12).append(Decoder.getNumeric(hexStrings.get(j).get(i * 2)));
             }
+            reportLog.stringColumn("ID").append(reportID + "-"+ String.valueOf(i));
         }
     }
 
@@ -127,19 +128,24 @@ public class Reader {
         System.out.println(reportLog.print());
     }
 
-    /*  Information to scrape:
-            Skill Levels
-            Player names
-            Player IDs
-            Report Data/Time
-            Equipment
-            Armamemts
-    */
+    /*
+     * Ideas to display:
+     * March Rankings
+     * Best reports in terms of KP Ratio
+     * RSS costs per march*** this depends on T4 or T5 though
+     */
+
+    /*
+     * Information to scrape:
+     * Player IDs
+     * Report Data/Time
+     * Player names
+     */
     public static void main(String[] args) {
 
         Reader reader = new Reader();
 
-        String DIRECTORY_PATH = "C:\\Users\\deval\\Desktop\\ROK\\rok-report-tool\\reports";
+        String DIRECTORY_PATH = "C:\\Users\\deval\\Desktop\\Projects\\rok-report-tool\\reports";
 
         File folder = new File(DIRECTORY_PATH);
         File[] listOfFiles = folder.listFiles();
@@ -148,7 +154,7 @@ public class Reader {
             for (File file : listOfFiles) {
                 if (file.isFile()) {
                     System.out.println(file.getName());
-                    reader.extractBattles(file.getPath());
+                    reader.extractData(file.getPath(), file.getName());
                 }
             }
         } else {
