@@ -16,6 +16,7 @@ import tech.tablesaw.api.*;
 
 public class Reader {
     private Table reportLog;
+    private Map<String, String> hIDMap;
 
     public Reader() {
         reportLog = Table.create("Reports",
@@ -27,6 +28,20 @@ public class Reader {
                                     IntColumn.create("OppDead"), IntColumn.create("OppSev"),
                                     IntColumn.create("OppSlight"), IntColumn.create("OppRemaining"),
                                     IntColumn.create("OppKP"), IntColumn.create("OppPower"), StringColumn.create("ID"));
+
+        hIDMap = new HashMap<String, String>();
+
+        // Pull list of Cmdr name to HId mappings
+        File file = new File("HIds.csv");
+        try (Scanner scanner = new Scanner(file)) {
+            while (scanner.hasNextLine()) {
+                String line = scanner.nextLine();
+                String[] data = line.split(",");
+                hIDMap.put(data[1].trim(), data[0].trim());
+            }
+        } catch (FileNotFoundException e) {
+            e.printStackTrace();
+        }
     }
 
     private List<List<String>> extractHex(String fileName) {
@@ -89,38 +104,26 @@ public class Reader {
     }
 
     public void extractData(String filename, String reportID) {
-        List<List<String>> hexStrings = extractHex(filename);
-        int numReports = (hexStrings.get(9).size() / 2) - 1;
-        Map<String, String> hIDMap = new HashMap<String, String>();
+        if (!(reportLog.columns("ID").contains(reportID))) {
+            List<List<String>> hexStrings = extractHex(filename);
+            int numReports = (hexStrings.get(9).size() / 2) - 1;
 
-        // Pull list of Cmdr names to HIds
-        File file = new File("HIds.csv");
-        try (Scanner scanner = new Scanner(file)) {
-            while (scanner.hasNextLine()) {
-                String line = scanner.nextLine();
-                String[] data = line.split(",");
-                hIDMap.put(data[1].trim(), data[0].trim());
+            // Add data from each report to the report log
+            for (int i = 0; i < numReports; i++) {
+                reportLog.stringColumn("MyPrimCmdr").append(Decoder.getHeroID(hexStrings.get(9).get(0), hIDMap));
+                reportLog.stringColumn("MySecCmdr").append(Decoder.getHeroID(hexStrings.get(8).get(0), hIDMap));
+                reportLog.stringColumn("OppPrimCmdr").append(
+                        Decoder.getHeroID(hexStrings.get(9).get(2 + (i * 2)), hIDMap));
+                reportLog.stringColumn("OppSecCmdr").append(
+                        Decoder.getHeroID(hexStrings.get(8).get(2 + (i * 2)), hIDMap));
+                reportLog.intColumn("MyPower").append(Decoder.getPower(hexStrings.get(6).get(1 + (i * 2))));
+                reportLog.intColumn("OppPower").append(Decoder.getPower(hexStrings.get(6).get(i * 2)));
+                for (int j = 0; j < 7; j++) {
+                    reportLog.intColumn(j+2).append(Decoder.getNumeric(hexStrings.get(j).get(1 + (i * 2))));
+                    reportLog.intColumn(j+12).append(Decoder.getNumeric(hexStrings.get(j).get(i * 2)));
+                }
+                reportLog.stringColumn("ID").append(reportID + "-"+ String.valueOf(i));
             }
-        } catch (FileNotFoundException e) {
-            e.printStackTrace();
-            return;
-        }
-
-        // Add data from each report to the report log
-        for (int i = 0; i < numReports; i++) {
-            reportLog.stringColumn("MyPrimCmdr").append(Decoder.getHeroID(hexStrings.get(9).get(0), hIDMap));
-            reportLog.stringColumn("MySecCmdr").append(Decoder.getHeroID(hexStrings.get(8).get(0), hIDMap));
-            reportLog.stringColumn("OppPrimCmdr").append(
-                    Decoder.getHeroID(hexStrings.get(9).get(2 + (i * 2)), hIDMap));
-            reportLog.stringColumn("OppSecCmdr").append(
-                    Decoder.getHeroID(hexStrings.get(8).get(2 + (i * 2)), hIDMap));
-            reportLog.intColumn("MyPower").append(Decoder.getPower(hexStrings.get(6).get(1 + (i * 2))));
-            reportLog.intColumn("OppPower").append(Decoder.getPower(hexStrings.get(6).get(i * 2)));
-            for (int j = 0; j < 7; j++) {
-                reportLog.intColumn(j+2).append(Decoder.getNumeric(hexStrings.get(j).get(1 + (i * 2))));
-                reportLog.intColumn(j+12).append(Decoder.getNumeric(hexStrings.get(j).get(i * 2)));
-            }
-            reportLog.stringColumn("ID").append(reportID + "-"+ String.valueOf(i));
         }
     }
 
@@ -128,38 +131,4 @@ public class Reader {
         System.out.println(reportLog.print());
     }
 
-    /*
-     * Ideas to display:
-     * March Rankings
-     * Best reports in terms of KP Ratio
-     * RSS costs per march*** this depends on T4 or T5 though
-     */
-
-    /*
-     * Information to scrape:
-     * Player IDs
-     * Report Data/Time
-     * Player names
-     */
-    public static void main(String[] args) {
-
-        Reader reader = new Reader();
-
-        String DIRECTORY_PATH = "C:\\Users\\deval\\Desktop\\Projects\\rok-report-tool\\reports";
-
-        File folder = new File(DIRECTORY_PATH);
-        File[] listOfFiles = folder.listFiles();
-
-        if (listOfFiles != null) {
-            for (File file : listOfFiles) {
-                if (file.isFile()) {
-                    System.out.println(file.getName());
-                    reader.extractData(file.getPath(), file.getName());
-                }
-            }
-        } else {
-            System.out.println("No files found or folder does not exist.");
-        }
-        reader.printTable();
-    }
 }

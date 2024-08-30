@@ -21,7 +21,7 @@ public class App extends Application {
     public void start(Stage stage) throws IOException {
         reportReader = new Reader();
 
-        scene = new Scene(loadFXML("main"), 1120, 690);
+        scene = new Scene(loadFXML("main"), 1120, 719);
         App.stage = stage;
         App.stage.setScene(scene);
         App.stage.show();
