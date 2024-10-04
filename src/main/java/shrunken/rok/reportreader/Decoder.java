@@ -1,4 +1,4 @@
-package shrunken.util;
+package shrunken.rok.reportreader;
 
 import java.util.Map;
 

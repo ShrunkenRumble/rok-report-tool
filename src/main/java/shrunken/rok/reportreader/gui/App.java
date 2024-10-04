@@ -7,6 +7,7 @@ import javafx.scene.Scene;
 import javafx.stage.Stage;
 import java.io.IOException;
 import shrunken.rok.reportreader.Reader;
+import shrunken.rok.reportreader.ReportLog;
 
 /**
  * JavaFX App
@@ -16,10 +17,12 @@ public class App extends Application {
     private static Scene scene;
     private static Stage stage;
     private static Reader reportReader;
+    private static ReportLog reportLog;
 
     @Override
     public void start(Stage stage) throws IOException {
         reportReader = new Reader();
+        reportLog = new ReportLog();
 
         scene = new Scene(loadFXML("main"), 1120, 719);
         App.stage = stage;
@@ -42,6 +45,10 @@ public class App extends Application {
 
     public static Reader getReader() {
         return App.reportReader;
+    }
+
+    public static ReportLog getReportLog() {
+        return App.reportLog;
     }
 
     public static void main(String[] args) {

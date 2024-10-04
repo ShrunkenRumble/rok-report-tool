@@ -1,7 +1,5 @@
 package shrunken.rok.reportreader;
 
-import shrunken.util.Decoder;
-
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
@@ -11,24 +9,11 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Scanner;
-import tech.tablesaw.api.*;
-
 
 public class Reader {
-    private Table reportLog;
     private Map<String, String> hIDMap;
 
     public Reader() {
-        reportLog = Table.create("Reports",
-                            StringColumn.create("MyPrimCmdr"), StringColumn.create("MySecCmdr"), IntColumn.create("MyUnits"), IntColumn.create("MyHeals"), IntColumn.create("MyDead"), IntColumn.create("MySev"),
-                                    IntColumn.create("MySlight"), IntColumn.create("MyRemaining"),
-                                    IntColumn.create("MyKP"), IntColumn.create("MyPower"),
-                                    StringColumn.create("OppPrimCmdr"), StringColumn.create("OppSecCmdr"),
-                                    IntColumn.create("OppUnits"), IntColumn.create("OppHeals"),
-                                    IntColumn.create("OppDead"), IntColumn.create("OppSev"),
-                                    IntColumn.create("OppSlight"), IntColumn.create("OppRemaining"),
-                                    IntColumn.create("OppKP"), IntColumn.create("OppPower"), StringColumn.create("ID"));
-
         hIDMap = new HashMap<String, String>();
 
         // Pull list of Cmdr name to HId mappings
@@ -103,32 +88,41 @@ public class Reader {
         return hexStrings;
     }
 
-    public void extractData(String filename, String reportID) {
-        if (!(reportLog.columns("ID").contains(reportID))) {
-            List<List<String>> hexStrings = extractHex(filename);
-            int numReports = (hexStrings.get(9).size() / 2) - 1;
+    public ArrayList<Report> extractData(String filename, String reportID) {
+        List<List<String>> hexStrings = extractHex(filename);
+        int numReports = (hexStrings.get(9).size() / 2) - 1;
+        Report report;
+        ArrayList<Report> reports = new ArrayList<Report>();
 
-            // Add data from each report to the report log
-            for (int i = 0; i < numReports; i++) {
-                reportLog.stringColumn("MyPrimCmdr").append(Decoder.getHeroID(hexStrings.get(9).get(0), hIDMap));
-                reportLog.stringColumn("MySecCmdr").append(Decoder.getHeroID(hexStrings.get(8).get(0), hIDMap));
-                reportLog.stringColumn("OppPrimCmdr").append(
-                        Decoder.getHeroID(hexStrings.get(9).get(2 + (i * 2)), hIDMap));
-                reportLog.stringColumn("OppSecCmdr").append(
-                        Decoder.getHeroID(hexStrings.get(8).get(2 + (i * 2)), hIDMap));
-                reportLog.intColumn("MyPower").append(Decoder.getPower(hexStrings.get(6).get(1 + (i * 2))));
-                reportLog.intColumn("OppPower").append(Decoder.getPower(hexStrings.get(6).get(i * 2)));
-                for (int j = 0; j < 7; j++) {
-                    reportLog.intColumn(j+2).append(Decoder.getNumeric(hexStrings.get(j).get(1 + (i * 2))));
-                    reportLog.intColumn(j+12).append(Decoder.getNumeric(hexStrings.get(j).get(i * 2)));
-                }
-                reportLog.stringColumn("ID").append(reportID + "-"+ String.valueOf(i));
-            }
+        // Add data from each report to the report log
+        for (int i = 0; i < numReports; i++) {
+
+            String myPrimCmdr = Decoder.getHeroID(hexStrings.get(9).get(0), hIDMap);
+            String mySecCmdr = Decoder.getHeroID(hexStrings.get(8).get(0), hIDMap);
+            String oppPrimCmdr = Decoder.getHeroID(hexStrings.get(9).get(2 + (i * 2)), hIDMap);
+            String oppSecCmdr = Decoder.getHeroID(hexStrings.get(8).get(2 + (i * 2)), hIDMap);
+            int myUnits = Decoder.getNumeric(hexStrings.get(0).get(1 + (i * 2)));
+            int myHeals = Decoder.getNumeric(hexStrings.get(1).get(1 + (i * 2)));
+            int myDead = Decoder.getNumeric(hexStrings.get(2).get(1 + (i * 2)));
+            int mySev = Decoder.getNumeric(hexStrings.get(3).get(1 + (i * 2)));
+            int mySlight = Decoder.getNumeric(hexStrings.get(4).get(1 + (i * 2)));
+            int myRemaining = Decoder.getNumeric(hexStrings.get(5).get(1 + (i * 2)));
+            int myKP = Decoder.getNumeric(hexStrings.get(6).get(1 + (i * 2)));
+            int myPowerLoss = Decoder.getPower(hexStrings.get(7).get(1 + (i * 2)));
+            int oppUnits = Decoder.getNumeric(hexStrings.get(0).get(i * 2));
+            int oppHeals = Decoder.getNumeric(hexStrings.get(1).get(i * 2));
+            int oppDead = Decoder.getNumeric(hexStrings.get(2).get(i * 2));
+            int oppSev = Decoder.getNumeric(hexStrings.get(3).get(i * 2));
+            int oppSlight = Decoder.getNumeric(hexStrings.get(4).get(i * 2));
+            int oppRemaining = Decoder.getNumeric(hexStrings.get(5).get(i * 2));
+            int oppKP = Decoder.getNumeric(hexStrings.get(6).get(i * 2));
+            int oppPowerLoss = Decoder.getPower(hexStrings.get(7).get(i * 2));
+
+            report = new Report(myPrimCmdr, mySecCmdr, oppPrimCmdr, oppSecCmdr, myUnits, myHeals, myDead, mySev, mySlight, myRemaining, myKP, myPowerLoss, oppUnits, oppHeals, oppDead, oppSev, oppSlight, oppRemaining, oppKP, oppPowerLoss, reportID + "-" + String.valueOf(i));
+            reports.add(report);
         }
-    }
 
-    public void printTable() {
-        System.out.println(reportLog.print());
+        return reports;
     }
 
 }

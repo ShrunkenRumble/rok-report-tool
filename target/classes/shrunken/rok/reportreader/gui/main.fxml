@@ -13,7 +13,11 @@
                   <fx:include source="import_tab.fxml" />
                </content>
             </Tab>
-          <Tab text="View" />
+          <Tab text="View">
+            <content>
+               <fx:include source="view_tab.fxml" />
+            </content>
+          </Tab>
         </tabs>
       </TabPane>
    </children>

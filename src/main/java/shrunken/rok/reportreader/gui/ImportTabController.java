@@ -37,23 +37,22 @@ public class ImportTabController {
         File folder = new File(DIRECTORY_PATH);
         File[] listOfFiles = folder.listFiles();
 
-        ArrayList<String> filesRead = new ArrayList<String>();
+        //ArrayList<String> filesRead = App.getReportLog().getFilesRead();
 
         if (listOfFiles != null) {
             for (File file : listOfFiles) {
                 if (file.isFile()) {
-                    //if (!filesRead.contains(file.getName())) {
+                    //if (!App.getReportLog().getFilesRead().contains(file.getName())) {
 
                     //}
                     System.out.println(file.getName());
-                    filesRead.add(file.getName());
                     if (screen.getText().equals("")) {
                         screen.setText("Importing Files...");
                         screen.setText(screen.getText() + "\n" + file.getName());
                     } else {
                         screen.setText(screen.getText() + "\n" + file.getName());
                     }
-                    App.getReader().extractData(file.getPath(), file.getName());
+                    App.getReportLog().addReport(App.getReader().extractData(file.getPath(), file.getName()));
                 }
             }
 
