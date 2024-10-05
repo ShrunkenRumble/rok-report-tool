@@ -29,34 +29,34 @@ public class ReportLog {
         for (int i = 0; i < report.size(); i++) {
             this.reports.add(report.get(i));
 
-            reportLog.stringColumn("MyPrimCmdr").append(report.get(i).getmyPrimCmdr());
-            reportLog.stringColumn("MySecCmdr").append(report.get(i).getmySecCmdr());
-            reportLog.stringColumn("OppPrimCmdr").append(report.get(i).getoppPrimCmdr());
-            reportLog.stringColumn("OppSecCmdr").append(report.get(i).getoppSecCmdr());
-            reportLog.intColumn("MyUnits").append(report.get(i).getmyUnits());
-            reportLog.intColumn("MyHeals").append(report.get(i).getmyHeals());
-            reportLog.intColumn("MyDead").append(report.get(i).getmyDead());
-            reportLog.intColumn("MySev").append(report.get(i).getmySev());
-            reportLog.intColumn("MySlight").append(report.get(i).getmySlight());
-            reportLog.intColumn("MyRemaining").append(report.get(i).getmyRemaining());
-            reportLog.intColumn("MyKP").append(report.get(i).getmyKP());
-            reportLog.intColumn("MyPowerLoss").append(report.get(i).getmyPowerLoss());
-            reportLog.intColumn("OppUnits").append(report.get(i).getoppUnits());
-            reportLog.intColumn("OppHeals").append(report.get(i).getoppHeals());
-            reportLog.intColumn("OppDead").append(report.get(i).getoppDead());
-            reportLog.intColumn("OppSev").append(report.get(i).getoppSev());
-            reportLog.intColumn("OppSlight").append(report.get(i).getoppSlight());
-            reportLog.intColumn("OppRemaining").append(report.get(i).getoppRemaining());
-            reportLog.intColumn("OppKP").append(report.get(i).getoppKP());
-            reportLog.intColumn("OppPowerLoss").append(report.get(i).getoppPowerLoss());
-            reportLog.stringColumn("ID").append(report.get(i).getid());
+            reportLog.stringColumn("MyPrimCmdr").append(report.get(i).getMyPrimCmdr());
+            reportLog.stringColumn("MySecCmdr").append(report.get(i).getMySecCmdr());
+            reportLog.intColumn("MyUnits").append(report.get(i).getMyUnits());
+            reportLog.intColumn("MyHeals").append(report.get(i).getMyHeals());
+            reportLog.intColumn("MyDead").append(report.get(i).getMyDead());
+            reportLog.intColumn("MySev").append(report.get(i).getMySev());
+            reportLog.intColumn("MySlight").append(report.get(i).getMySlight());
+            reportLog.intColumn("MyRemaining").append(report.get(i).getMyRemaining());
+            reportLog.intColumn("MyKP").append(report.get(i).getMyKP());
+            reportLog.intColumn("MyPowerLoss").append(report.get(i).getMyPowerLoss());
+            reportLog.stringColumn("OppPrimCmdr").append(report.get(i).getOppPrimCmdr());
+            reportLog.stringColumn("OppSecCmdr").append(report.get(i).getOppSecCmdr());
+            reportLog.intColumn("OppUnits").append(report.get(i).getOppUnits());
+            reportLog.intColumn("OppHeals").append(report.get(i).getOppHeals());
+            reportLog.intColumn("OppDead").append(report.get(i).getOppDead());
+            reportLog.intColumn("OppSev").append(report.get(i).getOppSev());
+            reportLog.intColumn("OppSlight").append(report.get(i).getOppSlight());
+            reportLog.intColumn("OppRemaining").append(report.get(i).getOppRemaining());
+            reportLog.intColumn("OppKP").append(report.get(i).getOppKP());
+            reportLog.intColumn("OppPowerLoss").append(report.get(i).getOppPowerLoss());
+            reportLog.stringColumn("ID").append(report.get(i).getId());
         }
     }
 
     public ArrayList<String> getFilesRead() {
         ArrayList<String> filesRead = new ArrayList<String>();
         for (int i = 0; i < reports.size(); i++) {
-            filesRead.add(reports.get(i).getid().split("-")[0]);
+            filesRead.add(reports.get(i).getId().split("-")[0]);
         }
         return filesRead;
     }

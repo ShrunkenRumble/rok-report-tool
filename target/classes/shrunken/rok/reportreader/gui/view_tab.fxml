@@ -48,6 +48,7 @@
                         <TableColumn fx:id="oppRemainingCol" prefWidth="90.0" text="OppRemaining" />
                         <TableColumn fx:id="oppKPCol" prefWidth="90.0" text="OppKP" />
                         <TableColumn fx:id="oppPowerLossCol" prefWidth="90.0" text="OppPowerLoss" />
+                        <TableColumn fx:id="idCol" prefWidth="90.0" text="Id" />
                     </columns>
                   </TableView>
                </children>

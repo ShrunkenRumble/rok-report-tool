@@ -1,169 +1,172 @@
 package shrunken.rok.reportreader;
 
+import javafx.beans.property.SimpleIntegerProperty;
+import javafx.beans.property.SimpleStringProperty;
+
 public class Report {
-    private String myPrimCmdr, mySecCmdr, oppPrimCmdr, oppSecCmdr;
-    private int myUnits, myHeals, myDead, mySev, mySlight, myRemaining, myKP, myPowerLoss;
-    private int oppUnits, oppHeals, oppDead, oppSev, oppSlight, oppRemaining, oppKP, oppPowerLoss;
-    private String id;
+    private SimpleStringProperty myPrimCmdr, mySecCmdr, oppPrimCmdr, oppSecCmdr;
+    private SimpleIntegerProperty myUnits, myHeals, myDead, mySev, mySlight, myRemaining, myKP, myPowerLoss;
+    private SimpleIntegerProperty oppUnits, oppHeals, oppDead, oppSev, oppSlight, oppRemaining, oppKP, oppPowerLoss;
+    private SimpleStringProperty id;
 
     public Report() {
-        this.myPrimCmdr = "";
-        this.mySecCmdr = "";
-        this.oppPrimCmdr = "";
-        this.oppSecCmdr = "";
-        this.id = "";
+        this.myPrimCmdr = new SimpleStringProperty(" ");
+        this.mySecCmdr = new SimpleStringProperty(" ");
+        this.oppPrimCmdr = new SimpleStringProperty(" ");
+        this.oppSecCmdr = new SimpleStringProperty(" ");
+        this.id = new SimpleStringProperty(" ");
     }
 
     public Report(String myPrimCmdr, String mySecCmdr, String oppPrimCmdr, String oppSecCmdr, int myUnits,
                     int myHeals, int myDead, int mySev, int mySlight, int myRemaining, int myKP, int myPowerLoss, int oppUnits, int oppHeals, int oppDead, int oppSev, int oppSlight, int oppRemaining, int oppKP, int oppPowerLoss, String id){
-        this.myPrimCmdr = myPrimCmdr;
-        this.mySecCmdr = mySecCmdr;
-        this.oppPrimCmdr = oppPrimCmdr;
-        this.oppSecCmdr = oppSecCmdr;
-        this.myUnits = myUnits;
-        this.myHeals = myHeals;
-        this.myDead = myDead;
-        this.mySev = mySev;
-        this.mySlight = mySlight;
-        this.myRemaining = myRemaining;
-        this.myKP = myKP;
-        this.myPowerLoss = myPowerLoss;
-        this.oppUnits = oppUnits;
-        this.oppHeals = oppHeals;
-        this.oppDead = oppDead;
-        this.oppSev = oppSev;
-        this.oppSlight = oppSlight;
-        this.oppRemaining = oppRemaining;
-        this.oppKP = oppKP;
-        this.oppPowerLoss = oppPowerLoss;
-        this.id = id;
+        this.myPrimCmdr = new SimpleStringProperty(myPrimCmdr);
+        this.mySecCmdr = new SimpleStringProperty(mySecCmdr);
+        this.oppPrimCmdr = new SimpleStringProperty(oppPrimCmdr);
+        this.oppSecCmdr = new SimpleStringProperty(oppSecCmdr);
+        this.myUnits = new SimpleIntegerProperty(myUnits);
+        this.myHeals = new SimpleIntegerProperty(myHeals);
+        this.myDead = new SimpleIntegerProperty(myDead);
+        this.mySev = new SimpleIntegerProperty(mySev);
+        this.mySlight = new SimpleIntegerProperty(mySlight);
+        this.myRemaining = new SimpleIntegerProperty(myRemaining);
+        this.myKP = new SimpleIntegerProperty(myKP);
+        this.myPowerLoss = new SimpleIntegerProperty(myPowerLoss);
+        this.oppUnits = new SimpleIntegerProperty(oppUnits);
+        this.oppHeals = new SimpleIntegerProperty(oppHeals);
+        this.oppDead = new SimpleIntegerProperty(oppDead);
+        this.oppSev = new SimpleIntegerProperty(oppSev);
+        this.oppSlight = new SimpleIntegerProperty(oppSlight);
+        this.oppRemaining = new SimpleIntegerProperty(oppRemaining);
+        this.oppKP = new SimpleIntegerProperty(oppKP);
+        this.oppPowerLoss = new SimpleIntegerProperty(oppPowerLoss);
+        this.id = new SimpleStringProperty(id);
     }
 
-    public String getmyPrimCmdr() {
-        return this.myPrimCmdr;
+    public String getMyPrimCmdr() {
+        return this.myPrimCmdr.get();
     }
-    public String getmySecCmdr() {
-        return this.mySecCmdr;
+    public String getMySecCmdr() {
+        return this.mySecCmdr.get();
     }
-    public String getoppPrimCmdr() {
-        return this.oppPrimCmdr;
+    public int getMyUnits() {
+        return this.myUnits.get();
     }
-    public String getoppSecCmdr() {
-        return this.oppSecCmdr;
+    public int getMyHeals() {
+        return this.myHeals.get();
     }
-    public int getmyPowerLoss() {
-        return this.myPowerLoss;
+    public int getMyDead() {
+        return this.myDead.get();
     }
-    public int getmyUnits() {
-        return this.myUnits;
+    public int getMySev() {
+        return this.mySev.get();
     }
-    public int getmyHeals() {
-        return this.myHeals;
+    public int getMySlight() {
+        return this.mySlight.get();
     }
-    public int getmyDead() {
-        return this.myDead;
+    public int getMyRemaining() {
+        return this.myRemaining.get();
     }
-    public int getmySev() {
-        return this.mySev;
+    public int getMyKP() {
+        return this.myKP.get();
     }
-    public int getmySlight() {
-        return this.mySlight;
+    public int getMyPowerLoss() {
+        return this.myPowerLoss.get();
     }
-    public int getmyRemaining() {
-        return this.myRemaining;
+    public String getOppPrimCmdr() {
+        return this.oppPrimCmdr.get();
     }
-    public int getmyKP() {
-        return this.myKP;
+    public String getOppSecCmdr() {
+        return this.oppSecCmdr.get();
     }
-    public int getoppPowerLoss() {
-        return this.oppPowerLoss;
+    public int getOppUnits() {
+        return this.oppUnits.get();
     }
-    public int getoppUnits() {
-        return this.oppUnits;
+    public int getOppHeals() {
+        return this.oppHeals.get();
     }
-    public int getoppHeals() {
-        return this.oppHeals;
+    public int getOppDead() {
+        return this.oppDead.get();
     }
-    public int getoppDead() {
-        return this.oppDead;
+    public int getOppSev() {
+        return this.oppSev.get();
     }
-    public int getoppSev() {
-        return this.oppSev;
+    public int getOppSlight() {
+        return this.oppSlight.get();
     }
-    public int getoppSlight() {
-        return this.oppSlight;
+    public int getOppRemaining() {
+        return this.oppRemaining.get();
     }
-    public int getoppRemaining() {
-        return this.oppRemaining;
+    public int getOppKP() {
+        return this.oppKP.get();
     }
-    public int getoppKP() {
-        return this.oppKP;
+    public int getOppPowerLoss() {
+        return this.oppPowerLoss.get();
     }
-    public String getid() {
-        return this.id;
+    public String getId() {
+        return this.id.get();
     }
 
-    public void setmyPrimCmdr(String myPrimCmdr) {
-        this.myPrimCmdr = myPrimCmdr;
+    public void setMyPrimCmdr(String myPrimCmdr) {
+        this.myPrimCmdr = new SimpleStringProperty(myPrimCmdr);
     }
-    public void setmySecCmdr(String mySecCmdr) {
-        this.mySecCmdr = mySecCmdr;
+    public void setMySecCmdr(String mySecCmdr) {
+        this.mySecCmdr = new SimpleStringProperty(mySecCmdr);
     }
-    public void setoppPrimCmdr(String oppPrimCmdr) {
-        this.oppPrimCmdr = oppPrimCmdr;
+    public void setMyUnits(int myUnits) {
+        this.myUnits = new SimpleIntegerProperty(myUnits);
     }
-    public void setoppSecCmdr(String oppSecCmdr) {
-        this.oppSecCmdr = oppSecCmdr;
+    public void setMyHeals(int myHeals) {
+        this.myHeals = new SimpleIntegerProperty(myHeals);
     }
-    public void setmyPowerLoss(int myPowerLoss) {
-        this.myPowerLoss = myPowerLoss;
+    public void setMyDead(int myDead) {
+        this.myDead = new SimpleIntegerProperty(myDead);
     }
-    public void setmyUnits(int myUnits) {
-        this.myUnits = myUnits;
+    public void setMySev(int mySev) {
+        this.mySev = new SimpleIntegerProperty(mySev);
     }
-    public void setmyHeals(int myHeals) {
-        this.myHeals = myHeals;
+    public void setMySlight(int mySlight) {
+        this.mySlight = new SimpleIntegerProperty(mySlight);
     }
-    public void setmyDead(int myDead) {
-        this.myDead = myDead;
+    public void setMyRemaining(int myRemaining) {
+        this.myRemaining = new SimpleIntegerProperty(myRemaining);
     }
-    public void setmySev(int mySev) {
-        this.mySev = mySev;
+    public void setMyKP(int myKP) {
+        this.myKP = new SimpleIntegerProperty(myKP);
     }
-    public void setmySlight(int mySlight) {
-        this.mySlight = mySlight;
+    public void setMyPowerLoss(int myPowerLoss) {
+        this.myPowerLoss = new SimpleIntegerProperty(myPowerLoss);
     }
-    public void setmyRemaining(int myRemaining) {
-        this.myRemaining = myRemaining;
+    public void setOppPrimCmdr(String oppPrimCmdr) {
+        this.oppPrimCmdr = new SimpleStringProperty(oppPrimCmdr);
     }
-    public void setmyKP(int myKP) {
-        this.myKP = myKP;
+    public void setOppSecCmdr(String oppSecCmdr) {
+        this.oppSecCmdr = new SimpleStringProperty(oppSecCmdr);
     }
-    public void setoppPowerLoss(int oppPowerLoss) {
-        this.oppPowerLoss = oppPowerLoss;
+    public void setOppUnits(int oppUnits) {
+        this.oppUnits = new SimpleIntegerProperty(oppUnits);
     }
-    public void setoppUnits(int oppUnits) {
-        this.oppUnits = oppUnits;
+    public void setOppHeals(int oppHeals) {
+        this.oppHeals = new SimpleIntegerProperty(oppHeals);
     }
-    public void setoppHeals(int oppHeals) {
-        this.oppHeals = oppHeals;
+    public void setOppDead(int oppDead) {
+        this.oppDead = new SimpleIntegerProperty(oppDead);
     }
-    public void setoppDead(int oppDead) {
-        this.oppDead = oppDead;
+    public void setOppSev(int oppSev) {
+        this.oppSev = new SimpleIntegerProperty(oppSev);
     }
-    public void setoppSev(int oppSev) {
-        this.oppSev = oppSev;
+    public void setOppSlight(int oppSlight) {
+        this.oppSlight = new SimpleIntegerProperty(oppSlight);
     }
-    public void setoppSlight(int oppSlight) {
-        this.oppSlight = oppSlight;
+    public void setOppRemaining(int oppRemaining) {
+        this.oppRemaining = new SimpleIntegerProperty(oppRemaining);
     }
-    public void setoppRemaining(int oppRemaining) {
-        this.oppRemaining = oppRemaining;
+    public void setOppKP(int oppKP) {
+        this.oppKP = new SimpleIntegerProperty(oppKP);
     }
-    public void setoppKP(int oppKP) {
-        this.oppKP = oppKP;
+    public void setOppPowerLoss(int oppPowerLoss) {
+        this.oppPowerLoss = new SimpleIntegerProperty(oppPowerLoss);
     }
-    public void setid(String id) {
-        this.id = id;
+    public void setId(String id) {
+        this.id = new SimpleStringProperty(id);
     }
 }

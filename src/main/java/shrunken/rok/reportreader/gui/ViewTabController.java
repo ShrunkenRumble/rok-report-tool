@@ -52,6 +52,8 @@ public class ViewTabController {
     TableColumn<Report, Integer> oppKPCol;
     @FXML
     TableColumn<Report, Integer> oppPowerLossCol;
+    @FXML
+    TableColumn<Report, String> idCol;
 
     private boolean tableInitialized = false;
 
@@ -76,6 +78,7 @@ public class ViewTabController {
         oppRemainingCol.setCellValueFactory(new PropertyValueFactory<Report, Integer>("oppRemaining"));
         oppKPCol.setCellValueFactory(new PropertyValueFactory<Report, Integer>("oppKP"));
         oppPowerLossCol.setCellValueFactory(new PropertyValueFactory<Report, Integer>("oppPowerLoss"));
+        idCol.setCellValueFactory(new PropertyValueFactory<Report, String>("id"));
         tableInitialized = true;
     }
 
