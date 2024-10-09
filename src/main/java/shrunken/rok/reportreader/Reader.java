@@ -88,11 +88,16 @@ public class Reader {
         return hexStrings;
     }
 
-    public ArrayList<Report> extractData(String filename, String reportID) {
-        List<List<String>> hexStrings = extractHex(filename);
+    public ArrayList<Report> extractData(String filePath, String filename) {
+        List<List<String>> hexStrings = extractHex(filePath);
         int numReports = (hexStrings.get(9).size() / 2) - 1;
         Report report;
         ArrayList<Report> reports = new ArrayList<Report>();
+
+        // Get the report date and report ID from file name
+        String rawDate = filename.substring(16, 24);
+        String formattedDate = rawDate.substring(4,6) + "/" + rawDate.substring(6,8) + "/" + rawDate.substring(0, 4);
+        String reportID = filename.split("_")[1] + filename.split("_")[2];
 
         // Add data from each report to the report log
         for (int i = 0; i < numReports; i++) {
@@ -118,7 +123,7 @@ public class Reader {
             int oppKP = Decoder.getNumeric(hexStrings.get(6).get(i * 2));
             int oppPowerLoss = Decoder.getPower(hexStrings.get(7).get(i * 2));
 
-            report = new Report(myPrimCmdr, mySecCmdr, oppPrimCmdr, oppSecCmdr, myUnits, myHeals, myDead, mySev, mySlight, myRemaining, myKP, myPowerLoss, oppUnits, oppHeals, oppDead, oppSev, oppSlight, oppRemaining, oppKP, oppPowerLoss, reportID + "-" + String.valueOf(i));
+            report = new Report(formattedDate, myPrimCmdr, mySecCmdr, oppPrimCmdr, oppSecCmdr, myUnits, myHeals, myDead, mySev, mySlight, myRemaining, myKP, myPowerLoss, oppUnits, oppHeals, oppDead, oppSev, oppSlight, oppRemaining, oppKP, oppPowerLoss, reportID + "-" + String.valueOf(i), Integer.valueOf(rawDate));
             reports.add(report);
         }
 

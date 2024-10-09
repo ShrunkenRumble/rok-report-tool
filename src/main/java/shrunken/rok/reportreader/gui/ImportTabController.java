@@ -8,6 +8,7 @@ import javafx.fxml.FXML;
 import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
 import javafx.stage.DirectoryChooser;
+import shrunken.rok.reportreader.Report;
 
 public class ImportTabController {
     @FXML
@@ -37,22 +38,21 @@ public class ImportTabController {
         File folder = new File(DIRECTORY_PATH);
         File[] listOfFiles = folder.listFiles();
 
-        //ArrayList<String> filesRead = App.getReportLog().getFilesRead();
-
         if (listOfFiles != null) {
             for (File file : listOfFiles) {
                 if (file.isFile()) {
-                    //if (!App.getReportLog().getFilesRead().contains(file.getName())) {
-
-                    //}
-                    System.out.println(file.getName());
-                    if (screen.getText().equals("")) {
-                        screen.setText("Importing Files...");
-                        screen.setText(screen.getText() + "\n" + file.getName());
-                    } else {
-                        screen.setText(screen.getText() + "\n" + file.getName());
+                    if (!App.getReportLog().getFilesRead().contains(file.getName())) {
+                        System.out.println(file.getName());
+                        if (screen.getText().equals("")) {
+                            screen.setText("Importing Files...");
+                            screen.setText(screen.getText() + "\n" + file.getName());
+                        } else {
+                            screen.setText(screen.getText() + "\n" + file.getName());
+                        }
+                        ArrayList<Report> reports = App.getReader().extractData(file.getPath(), file.getName());
+                        // TODO: Error checking on reports before adding to reportLog
+                        App.getReportLog().addReport(reports);
                     }
-                    App.getReportLog().addReport(App.getReader().extractData(file.getPath(), file.getName()));
                 }
             }
 

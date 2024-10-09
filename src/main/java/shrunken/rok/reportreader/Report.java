@@ -4,21 +4,25 @@ import javafx.beans.property.SimpleIntegerProperty;
 import javafx.beans.property.SimpleStringProperty;
 
 public class Report {
-    private SimpleStringProperty myPrimCmdr, mySecCmdr, oppPrimCmdr, oppSecCmdr;
+    private SimpleStringProperty myCmdrPair, myPrimCmdr, mySecCmdr, oppCmdrPair, oppPrimCmdr, oppSecCmdr, id, date;
     private SimpleIntegerProperty myUnits, myHeals, myDead, mySev, mySlight, myRemaining, myKP, myPowerLoss;
     private SimpleIntegerProperty oppUnits, oppHeals, oppDead, oppSev, oppSlight, oppRemaining, oppKP, oppPowerLoss;
-    private SimpleStringProperty id;
+    private int dateSort;
 
     public Report() {
+        this.myCmdrPair = new SimpleStringProperty(" ");
         this.myPrimCmdr = new SimpleStringProperty(" ");
         this.mySecCmdr = new SimpleStringProperty(" ");
+        this.oppCmdrPair = new SimpleStringProperty(" ");
         this.oppPrimCmdr = new SimpleStringProperty(" ");
         this.oppSecCmdr = new SimpleStringProperty(" ");
         this.id = new SimpleStringProperty(" ");
+        this.date = new SimpleStringProperty(" ");
     }
 
-    public Report(String myPrimCmdr, String mySecCmdr, String oppPrimCmdr, String oppSecCmdr, int myUnits,
-                    int myHeals, int myDead, int mySev, int mySlight, int myRemaining, int myKP, int myPowerLoss, int oppUnits, int oppHeals, int oppDead, int oppSev, int oppSlight, int oppRemaining, int oppKP, int oppPowerLoss, String id){
+    public Report(String date, String myPrimCmdr, String mySecCmdr, String oppPrimCmdr, String oppSecCmdr, int myUnits,
+                    int myHeals, int myDead, int mySev, int mySlight, int myRemaining, int myKP, int myPowerLoss, int oppUnits, int oppHeals, int oppDead, int oppSev, int oppSlight, int oppRemaining, int oppKP, int oppPowerLoss, String id, int dateSort) {
+        this.date = new SimpleStringProperty(date);
         this.myPrimCmdr = new SimpleStringProperty(myPrimCmdr);
         this.mySecCmdr = new SimpleStringProperty(mySecCmdr);
         this.oppPrimCmdr = new SimpleStringProperty(oppPrimCmdr);
@@ -40,8 +44,18 @@ public class Report {
         this.oppKP = new SimpleIntegerProperty(oppKP);
         this.oppPowerLoss = new SimpleIntegerProperty(oppPowerLoss);
         this.id = new SimpleStringProperty(id);
+        this.myCmdrPair = new SimpleStringProperty(myPrimCmdr + " / " + mySecCmdr);
+        this.oppCmdrPair = new SimpleStringProperty(oppPrimCmdr + " / " + oppSecCmdr);
+        this.dateSort = dateSort;
     }
 
+    // Getters
+    public String getDate() {
+        return this.date.get();
+    }
+    public String getMyCmdrPair() {
+        return this.myCmdrPair.get();
+    }
     public String getMyPrimCmdr() {
         return this.myPrimCmdr.get();
     }
@@ -71,6 +85,9 @@ public class Report {
     }
     public int getMyPowerLoss() {
         return this.myPowerLoss.get();
+    }
+    public String getOppCmdrPair() {
+        return this.oppCmdrPair.get();
     }
     public String getOppPrimCmdr() {
         return this.oppPrimCmdr.get();
@@ -105,7 +122,14 @@ public class Report {
     public String getId() {
         return this.id.get();
     }
+    public int getDateSort() {
+        return this.dateSort;
+    }
 
+    // Setters
+    public void setDate(String date) {
+        this.date = new SimpleStringProperty(date);
+    }
     public void setMyPrimCmdr(String myPrimCmdr) {
         this.myPrimCmdr = new SimpleStringProperty(myPrimCmdr);
     }

@@ -14,11 +14,26 @@
         <items>
           <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="688.0" prefWidth="260.0">
                <children>
-                  <VBox layoutX="43.0" layoutY="32.0" prefHeight="200.0" prefWidth="100.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+                  <VBox prefHeight="200.0" prefWidth="100.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
                      <children>
                         <Button fx:id="refresh" mnemonicParsing="false" onAction="#setTable" prefHeight="25.0" prefWidth="218.0" text="Refresh">
                            <VBox.margin>
                               <Insets left="20.0" right="20.0" top="20.0" />
+                           </VBox.margin>
+                        </Button>
+                        <Button fx:id="refresh1" mnemonicParsing="false" onAction="#setTable" prefHeight="25.0" prefWidth="218.0" text="Individual Reports">
+                           <VBox.margin>
+                              <Insets bottom="20.0" left="20.0" right="20.0" top="20.0" />
+                           </VBox.margin>
+                        </Button>
+                        <Button fx:id="refresh11" mnemonicParsing="false" onAction="#setTable" prefHeight="25.0" prefWidth="218.0" text="Multi-Reports">
+                           <VBox.margin>
+                              <Insets bottom="20.0" left="20.0" right="20.0" />
+                           </VBox.margin>
+                        </Button>
+                        <Button fx:id="refresh111" mnemonicParsing="false" onAction="#setTable" prefHeight="25.0" prefWidth="218.0" text="Export All Data">
+                           <VBox.margin>
+                              <Insets left="20.0" right="20.0" />
                            </VBox.margin>
                         </Button>
                      </children>
@@ -28,27 +43,15 @@
                <children>
                   <TableView fx:id="table" prefHeight="688.0" prefWidth="912.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
                     <columns>
-                      <TableColumn fx:id="myPrimCmdrCol" prefWidth="90.0" text="MyPrimCmdr" />
-                      <TableColumn fx:id="mySecCmdrCol" prefWidth="88.0" text="MySecCmdr" />
-                        <TableColumn fx:id="myUnitsCol" prefWidth="69.0" text="MyUnits" />
-                        <TableColumn fx:id="myHealsCol" prefWidth="69.0" text="MyHeals" />
-                        <TableColumn fx:id="myDeadCol" prefWidth="77.0" text="MyDead" />
-                        <TableColumn fx:id="mySevCol" prefWidth="61.0" text="MySev" />
-                        <TableColumn fx:id="mySlightCol" prefWidth="81.0" text="MySlight" />
-                        <TableColumn fx:id="myRemainingCol" prefWidth="101.0" text="MyRemaining" />
-                        <TableColumn fx:id="myKPCol" prefWidth="68.0" text="MyKP" />
-                        <TableColumn fx:id="myPowerLossCol" prefWidth="93.0" text="MyPowerLoss" />
-                        <TableColumn fx:id="oppPrimCmdrCol" prefWidth="90.0" text="OppPrimCmdr" />
-                        <TableColumn fx:id="oppSecCmdrCol" prefWidth="90.0" text="OppSecCmdr" />
-                        <TableColumn fx:id="oppUnitsCol" prefWidth="90.0" text="OppUnits" />
-                        <TableColumn fx:id="oppHealsCol" prefWidth="90.0" text="OppHeals" />
-                        <TableColumn fx:id="oppDeadCol" prefWidth="90.0" text="OppDead" />
-                        <TableColumn fx:id="oppSevCol" prefWidth="90.0" text="OppSev" />
-                        <TableColumn fx:id="oppSlightCol" prefWidth="90.0" text="OppSlight" />
-                        <TableColumn fx:id="oppRemainingCol" prefWidth="90.0" text="OppRemaining" />
-                        <TableColumn fx:id="oppKPCol" prefWidth="90.0" text="OppKP" />
-                        <TableColumn fx:id="oppPowerLossCol" prefWidth="90.0" text="OppPowerLoss" />
-                        <TableColumn fx:id="idCol" prefWidth="90.0" text="Id" />
+                        <TableColumn fx:id="dateCol" editable="false" prefWidth="90.0" sortable="false" text="Date" />
+                      <TableColumn fx:id="myCmdrPairCol" editable="false" prefWidth="90.0" text="MyCmdrPair" />
+                        <TableColumn fx:id="myDeadCol" editable="false" prefWidth="77.0" text="MyDead" />
+                        <TableColumn fx:id="mySevCol" editable="false" prefWidth="61.0" text="MySev" />
+                        <TableColumn fx:id="myKPCol" editable="false" prefWidth="68.0" text="MyKP" />
+                        <TableColumn fx:id="oppCmdrPairCol" editable="false" prefWidth="90.0" text="OppCmdrPair" />
+                        <TableColumn fx:id="oppDeadCol" editable="false" prefWidth="90.0" text="OppDead" />
+                        <TableColumn fx:id="oppSevCol" editable="false" prefWidth="90.0" text="OppSev" />
+                        <TableColumn fx:id="oppKPCol" editable="false" prefWidth="90.0" text="OppKP" />
                     </columns>
                   </TableView>
                </children>
