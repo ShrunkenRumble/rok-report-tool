@@ -1,6 +1,10 @@
 shrunken\rok\reportreader\gui\MainController.class
+shrunken\rok\reportreader\MultiReport.class
 shrunken\rok\reportreader\gui\App.class
 shrunken\rok\reportreader\Reader.class
+shrunken\rok\reportreader\Report.class
+shrunken\rok\reportreader\Decoder.class
 module-info.class
+shrunken\rok\reportreader\ReportLog.class
+shrunken\rok\reportreader\gui\ViewTabController.class
 shrunken\rok\reportreader\gui\ImportTabController.class
-shrunken\util\Decoder.class

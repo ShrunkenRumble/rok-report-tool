@@ -88,11 +88,11 @@ public class Reader {
         return hexStrings;
     }
 
-    public ArrayList<Report> extractData(String filePath, String filename) {
+    public Report extractData(String filePath, String filename) {
         List<List<String>> hexStrings = extractHex(filePath);
         int numReports = (hexStrings.get(9).size() / 2) - 1;
-        Report report;
-        ArrayList<Report> reports = new ArrayList<Report>();
+        Battle battle;
+        Report report = new Report();
 
         // Get the report date and report ID from file name
         String rawDate = filename.substring(16, 24);
@@ -123,11 +123,11 @@ public class Reader {
             int oppKP = Decoder.getNumeric(hexStrings.get(6).get(i * 2));
             int oppPowerLoss = Decoder.getPower(hexStrings.get(7).get(i * 2));
 
-            report = new Report(formattedDate, myPrimCmdr, mySecCmdr, oppPrimCmdr, oppSecCmdr, myUnits, myHeals, myDead, mySev, mySlight, myRemaining, myKP, myPowerLoss, oppUnits, oppHeals, oppDead, oppSev, oppSlight, oppRemaining, oppKP, oppPowerLoss, reportID + "-" + String.valueOf(i), Integer.valueOf(rawDate));
-            reports.add(report);
+            battle = new Battle(formattedDate, myPrimCmdr, mySecCmdr, oppPrimCmdr, oppSecCmdr, myUnits, myHeals, myDead, mySev, mySlight, myRemaining, myKP, myPowerLoss, oppUnits, oppHeals, oppDead, oppSev, oppSlight, oppRemaining, oppKP, oppPowerLoss, reportID + "-" + String.valueOf(i), Integer.valueOf(rawDate));
+            report.addBattle(battle);
         }
 
-        return reports;
+        return report;
     }
 
 }

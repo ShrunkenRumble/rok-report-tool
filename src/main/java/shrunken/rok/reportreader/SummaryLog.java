@@ -1,5 +1,5 @@
 package shrunken.rok.reportreader;
 
-public class MultiReport {
+public class SummaryLog {
 
 }

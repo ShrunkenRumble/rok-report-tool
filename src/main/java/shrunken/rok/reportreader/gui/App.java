@@ -1,13 +1,14 @@
 package shrunken.rok.reportreader.gui;
 
+import java.io.IOException;
+
 import javafx.application.Application;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.stage.Stage;
-import java.io.IOException;
+import shrunken.rok.reportreader.BattleLog;
 import shrunken.rok.reportreader.Reader;
-import shrunken.rok.reportreader.ReportLog;
 
 /**
  * JavaFX App
@@ -17,12 +18,12 @@ public class App extends Application {
     private static Scene scene;
     private static Stage stage;
     private static Reader reportReader;
-    private static ReportLog reportLog;
+    private static BattleLog battleLog;
 
     @Override
     public void start(Stage stage) throws IOException {
         reportReader = new Reader();
-        reportLog = new ReportLog();
+        battleLog = new BattleLog();
 
         scene = new Scene(loadFXML("main"), 1120, 719);
         App.stage = stage;
@@ -47,8 +48,8 @@ public class App extends Application {
         return App.reportReader;
     }
 
-    public static ReportLog getReportLog() {
-        return App.reportLog;
+    public static BattleLog getBattleLog() {
+        return App.battleLog;
     }
 
     public static void main(String[] args) {
