@@ -1,6 +1,6 @@
 package shrunken.rok.reportreader.gui;
 
-import shrunken.rok.reportreader.Battle;
+import shrunken.rok.reportreader.Report;
 import javafx.fxml.FXML;
 import javafx.scene.control.Button;
 import javafx.scene.control.TableColumn;
@@ -11,39 +11,39 @@ public class ViewTabController {
     @FXML
     Button refresh;
     @FXML
-    TableView<Battle> table;
+    TableView<Report> table;
     @FXML
-    TableColumn<Battle, String> dateCol;
+    TableColumn<Report, String> dateCol;
     @FXML
-    TableColumn<Battle, String> myCmdrPairCol;
+    TableColumn<Report, String> myCmdrPairCol;
     @FXML
-    TableColumn<Battle, Integer> myDeadCol;
+    TableColumn<Report, Integer> myDeadCol;
     @FXML
-    TableColumn<Battle, Integer> mySevCol;
+    TableColumn<Report, Integer> mySevCol;
     @FXML
-    TableColumn<Battle, Integer> myKPCol;
+    TableColumn<Report, Integer> myKPCol;
     @FXML
-    TableColumn<Battle, String> oppCmdrPairCol;
+    TableColumn<Report, String> oppCmdrPairCol;
     @FXML
-    TableColumn<Battle, Integer> oppDeadCol;
+    TableColumn<Report, Integer> oppDeadCol;
     @FXML
-    TableColumn<Battle, Integer> oppSevCol;
+    TableColumn<Report, Integer> oppSevCol;
     @FXML
-    TableColumn<Battle, Integer> oppKPCol;
+    TableColumn<Report, Integer> oppKPCol;
 
 
     private boolean tableInitialized = false;
 
     private void initTable() {
-        dateCol.setCellValueFactory(new PropertyValueFactory<Battle, String>("date"));
-        myCmdrPairCol.setCellValueFactory(new PropertyValueFactory<Battle, String>("myCmdrPair"));
-        myDeadCol.setCellValueFactory(new PropertyValueFactory<Battle, Integer>("myDead"));
-        mySevCol.setCellValueFactory(new PropertyValueFactory<Battle, Integer>("mySev"));
-        myKPCol.setCellValueFactory(new PropertyValueFactory<Battle, Integer>("myKP"));
-        oppCmdrPairCol.setCellValueFactory(new PropertyValueFactory<Battle, String>("oppCmdrPair"));
-        oppDeadCol.setCellValueFactory(new PropertyValueFactory<Battle, Integer>("oppDead"));
-        oppSevCol.setCellValueFactory(new PropertyValueFactory<Battle, Integer>("oppSev"));
-        oppKPCol.setCellValueFactory(new PropertyValueFactory<Battle, Integer>("oppKP"));
+        dateCol.setCellValueFactory(new PropertyValueFactory<Report, String>("date"));
+        myCmdrPairCol.setCellValueFactory(new PropertyValueFactory<Report, String>("myCmdrPair"));
+        myDeadCol.setCellValueFactory(new PropertyValueFactory<Report, Integer>("myDead"));
+        mySevCol.setCellValueFactory(new PropertyValueFactory<Report, Integer>("mySev"));
+        myKPCol.setCellValueFactory(new PropertyValueFactory<Report, Integer>("myKP"));
+        oppCmdrPairCol.setCellValueFactory(new PropertyValueFactory<Report, String>("oppCmdrPair"));
+        oppDeadCol.setCellValueFactory(new PropertyValueFactory<Report, Integer>("oppDead"));
+        oppSevCol.setCellValueFactory(new PropertyValueFactory<Report, Integer>("oppSev"));
+        oppKPCol.setCellValueFactory(new PropertyValueFactory<Report, Integer>("oppKP"));
 
         tableInitialized = true;
     }
@@ -53,7 +53,7 @@ public class ViewTabController {
         if (!tableInitialized) {
             initTable();
         }
-        table.setItems(App.getBattleLog().getBattles());
+        table.setItems(App.getReportLog().getReports());
 
     }
 

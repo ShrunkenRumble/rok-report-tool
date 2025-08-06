@@ -88,22 +88,25 @@ public class Reader {
         return hexStrings;
     }
 
-    public Report extractData(String filePath, String filename) {
+    public ArrayList<Report> extractData(String filePath, String filename) {
         List<List<String>> hexStrings = extractHex(filePath);
         int numReports = (hexStrings.get(9).size() / 2) - 1;
-        Battle battle;
-        Report report = new Report();
-
+        Report report;
+        ArrayList<Report> reports = new ArrayList<>();
+        // TODO: Figure out new date encoding
         // Get the report date and report ID from file name
         String rawDate = filename.substring(16, 24);
         String formattedDate = rawDate.substring(4,6) + "/" + rawDate.substring(6,8) + "/" + rawDate.substring(0, 4);
         String reportID = filename.split("_")[1] + filename.split("_")[2];
 
+        int myUnits_sum = 0, myHeals_sum = 0, myDead_sum = 0, mySev_sum = 0, mySlight_sum = 0, myRemaining_sum = 0, myKP_sum = 0, myPowerLoss_sum = 0;
+        int oppUnits_sum = 0, oppHeals_sum = 0, oppDead_sum = 0, oppSev_sum = 0, oppSlight_sum = 0, oppRemaining_sum = 0, oppKP_sum = 0, oppPowerLoss_sum = 0;
+
+        String myPrimCmdr = Decoder.getHeroID(hexStrings.get(9).get(0), hIDMap);
+        String mySecCmdr = Decoder.getHeroID(hexStrings.get(8).get(0), hIDMap);
+
         // Add data from each report to the report log
         for (int i = 0; i < numReports; i++) {
-
-            String myPrimCmdr = Decoder.getHeroID(hexStrings.get(9).get(0), hIDMap);
-            String mySecCmdr = Decoder.getHeroID(hexStrings.get(8).get(0), hIDMap);
             String oppPrimCmdr = Decoder.getHeroID(hexStrings.get(9).get(2 + (i * 2)), hIDMap);
             String oppSecCmdr = Decoder.getHeroID(hexStrings.get(8).get(2 + (i * 2)), hIDMap);
             int myUnits = Decoder.getNumeric(hexStrings.get(0).get(1 + (i * 2)));
@@ -122,12 +125,29 @@ public class Reader {
             int oppRemaining = Decoder.getNumeric(hexStrings.get(5).get(i * 2));
             int oppKP = Decoder.getNumeric(hexStrings.get(6).get(i * 2));
             int oppPowerLoss = Decoder.getPower(hexStrings.get(7).get(i * 2));
+            myUnits_sum += myUnits;
+            myHeals_sum += myHeals;
+            myDead_sum += myDead;
+            mySev_sum += mySev;
+            mySlight_sum += mySlight;
+            myRemaining_sum += myRemaining;
+            myKP_sum += myKP;
+            myPowerLoss_sum += myPowerLoss;
+            oppUnits_sum += oppUnits;
+            oppHeals_sum += oppHeals;
+            oppDead_sum += oppDead;
+            oppSev_sum += oppSev;
+            oppSlight_sum += oppSlight;
+            oppRemaining_sum += oppRemaining;
+            oppKP_sum += oppKP;
+            oppPowerLoss_sum += oppPowerLoss;
 
-            battle = new Battle(formattedDate, myPrimCmdr, mySecCmdr, oppPrimCmdr, oppSecCmdr, myUnits, myHeals, myDead, mySev, mySlight, myRemaining, myKP, myPowerLoss, oppUnits, oppHeals, oppDead, oppSev, oppSlight, oppRemaining, oppKP, oppPowerLoss, reportID + "-" + String.valueOf(i), Integer.valueOf(rawDate));
-            report.addBattle(battle);
+            report = new Report(formattedDate, myPrimCmdr, mySecCmdr, oppPrimCmdr, oppSecCmdr, myUnits, myHeals, myDead, mySev, mySlight, myRemaining, myKP, myPowerLoss, oppUnits, oppHeals, oppDead, oppSev, oppSlight, oppRemaining, oppKP, oppPowerLoss, reportID + "-" + String.valueOf(i), Integer.valueOf(rawDate));
+            reports.add(report);
         }
-
-        return report;
+        report = new Report(formattedDate, myPrimCmdr, mySecCmdr, "-", "-", myUnits_sum, myHeals_sum, myDead_sum, mySev_sum, mySlight_sum, myRemaining_sum, myKP_sum, myPowerLoss_sum, oppUnits_sum, oppHeals_sum, oppDead_sum, oppSev_sum, oppSlight_sum, oppRemaining_sum, oppKP_sum, oppPowerLoss_sum, reportID + "-SUM", Integer.valueOf(rawDate));
+        reports.add(report);
+        return reports;
     }
 
 }

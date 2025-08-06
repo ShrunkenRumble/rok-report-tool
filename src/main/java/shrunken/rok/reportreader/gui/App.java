@@ -7,8 +7,8 @@ import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.stage.Stage;
-import shrunken.rok.reportreader.BattleLog;
 import shrunken.rok.reportreader.Reader;
+import shrunken.rok.reportreader.ReportLog;
 
 /**
  * JavaFX App
@@ -18,12 +18,12 @@ public class App extends Application {
     private static Scene scene;
     private static Stage stage;
     private static Reader reportReader;
-    private static BattleLog battleLog;
+    private static ReportLog reportLog;
 
     @Override
     public void start(Stage stage) throws IOException {
         reportReader = new Reader();
-        battleLog = new BattleLog();
+        reportLog = new ReportLog();
 
         scene = new Scene(loadFXML("main"), 1120, 719);
         App.stage = stage;
@@ -48,8 +48,8 @@ public class App extends Application {
         return App.reportReader;
     }
 
-    public static BattleLog getBattleLog() {
-        return App.battleLog;
+    public static ReportLog getReportLog() {
+        return App.reportLog;
     }
 
     public static void main(String[] args) {

@@ -2,6 +2,7 @@ package shrunken.rok.reportreader.gui;
 
 import java.io.File;
 import java.io.IOException;
+import java.util.ArrayList;
 
 import javafx.fxml.FXML;
 import javafx.scene.control.Label;
@@ -38,7 +39,7 @@ public class ImportTabController {
         if (listOfFiles != null) {
             for (File file : listOfFiles) {
                 if (file.isFile()) {
-                    if (!App.getBattleLog().getFilesRead().contains(file.getName())) {
+                    if (!App.getReportLog().getFilesRead().contains(file.getName())) {
                         System.out.println(file.getName());
                         if (screen.getText().equals("")) {
                             screen.setText("Importing Files...");
@@ -46,9 +47,9 @@ public class ImportTabController {
                         } else {
                             screen.setText(screen.getText() + "\n" + file.getName());
                         }
-                        Report report = App.getReader().extractData(file.getPath(), file.getName());
+                        ArrayList<Report> reports = App.getReader().extractData(file.getPath(), file.getName());
                         // TODO: Error checking on reports before adding to reportLog
-                        App.getBattleLog().addReport(report);
+                        App.getReportLog().addReport(reports);
                     }
                 }
             }
