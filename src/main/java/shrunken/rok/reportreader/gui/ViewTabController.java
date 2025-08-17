@@ -1,11 +1,11 @@
 package shrunken.rok.reportreader.gui;
 
-import shrunken.rok.reportreader.Report;
 import javafx.fxml.FXML;
 import javafx.scene.control.Button;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
 import javafx.scene.control.cell.PropertyValueFactory;
+import shrunken.rok.reportreader.Report;
 
 public class ViewTabController {
     @FXML
@@ -35,7 +35,7 @@ public class ViewTabController {
     private boolean tableInitialized = false;
 
     private void initTable() {
-        dateCol.setCellValueFactory(new PropertyValueFactory<Report, String>("date"));
+        dateCol.setCellValueFactory(new PropertyValueFactory<Report, String>("formattedDate"));
         myCmdrPairCol.setCellValueFactory(new PropertyValueFactory<Report, String>("myCmdrPair"));
         myDeadCol.setCellValueFactory(new PropertyValueFactory<Report, Integer>("myDead"));
         mySevCol.setCellValueFactory(new PropertyValueFactory<Report, Integer>("mySev"));

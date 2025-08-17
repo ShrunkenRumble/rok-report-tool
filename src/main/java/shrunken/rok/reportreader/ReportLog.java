@@ -33,6 +33,7 @@ public class ReportLog {
     }
 
     public void addReport(ArrayList<Report> reports) {
+        // The last report in the list is a summary of all previous reports
         this.summarizedReports.add(reports.get(reports.size() - 1));
         for (int i = 0; i < reports.size() - 1; i++) {
             this.reports.add(reports.get(i));

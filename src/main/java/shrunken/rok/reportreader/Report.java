@@ -1,13 +1,15 @@
 package shrunken.rok.reportreader;
 
+import java.time.Instant;
+
 import javafx.beans.property.SimpleIntegerProperty;
 import javafx.beans.property.SimpleStringProperty;
 
 public class Report {
-    private SimpleStringProperty myCmdrPair, myPrimCmdr, mySecCmdr, oppCmdrPair, oppPrimCmdr, oppSecCmdr, id, date;
+    private SimpleStringProperty myCmdrPair, myPrimCmdr, mySecCmdr, oppCmdrPair, oppPrimCmdr, oppSecCmdr, id, formattedDate;
     private SimpleIntegerProperty myUnits, myHeals, myDead, mySev, mySlight, myRemaining, myKP, myPowerLoss;
     private SimpleIntegerProperty oppUnits, oppHeals, oppDead, oppSev, oppSlight, oppRemaining, oppKP, oppPowerLoss;
-    private int dateSort;
+    private Instant date;
 
     public Report() {
         this.myCmdrPair = new SimpleStringProperty(" ");
@@ -17,12 +19,12 @@ public class Report {
         this.oppPrimCmdr = new SimpleStringProperty(" ");
         this.oppSecCmdr = new SimpleStringProperty(" ");
         this.id = new SimpleStringProperty(" ");
-        this.date = new SimpleStringProperty(" ");
+        this.formattedDate = new SimpleStringProperty(" ");
     }
 
-    public Report(String date, String myPrimCmdr, String mySecCmdr, String oppPrimCmdr, String oppSecCmdr, int myUnits,
-                    int myHeals, int myDead, int mySev, int mySlight, int myRemaining, int myKP, int myPowerLoss, int oppUnits, int oppHeals, int oppDead, int oppSev, int oppSlight, int oppRemaining, int oppKP, int oppPowerLoss, String id, int dateSort) {
-        this.date = new SimpleStringProperty(date);
+    public Report(String myPrimCmdr, String mySecCmdr, String oppPrimCmdr, String oppSecCmdr, int myUnits,
+                    int myHeals, int myDead, int mySev, int mySlight, int myRemaining, int myKP, int myPowerLoss, int oppUnits, 
+                    int oppHeals, int oppDead, int oppSev, int oppSlight, int oppRemaining, int oppKP, int oppPowerLoss, String id, Instant date) {
         this.myPrimCmdr = new SimpleStringProperty(myPrimCmdr);
         this.mySecCmdr = new SimpleStringProperty(mySecCmdr);
         this.oppPrimCmdr = new SimpleStringProperty(oppPrimCmdr);
@@ -46,12 +48,13 @@ public class Report {
         this.id = new SimpleStringProperty(id);
         this.myCmdrPair = new SimpleStringProperty(myPrimCmdr + " / " + mySecCmdr);
         this.oppCmdrPair = new SimpleStringProperty(oppPrimCmdr + " / " + oppSecCmdr);
-        this.dateSort = dateSort;
+        this.formattedDate = new SimpleStringProperty(date.toString());
+        this.date = date;
     }
 
     // Getters
-    public String getDate() {
-        return this.date.get();
+    public String getFormattedDate() {
+        return this.formattedDate.get();
     }
     public String getMyCmdrPair() {
         return this.myCmdrPair.get();
@@ -122,14 +125,11 @@ public class Report {
     public String getId() {
         return this.id.get();
     }
-    public int getDateSort() {
-        return this.dateSort;
+    public Instant getDate() {
+        return this.date;
     }
 
     // Setters
-    public void setDate(String date) {
-        this.date = new SimpleStringProperty(date);
-    }
     public void setMyPrimCmdr(String myPrimCmdr) {
         this.myPrimCmdr = new SimpleStringProperty(myPrimCmdr);
     }
@@ -192,5 +192,9 @@ public class Report {
     }
     public void setId(String id) {
         this.id = new SimpleStringProperty(id);
+    }
+    public void setDate(Instant date) {
+        this.date = date;
+        this.formattedDate = new SimpleStringProperty(date.toString());
     }
 }

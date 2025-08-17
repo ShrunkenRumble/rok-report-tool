@@ -31,7 +31,7 @@ public class ImportTabController {
     }
 
     @FXML
-    private void readFiles() {
+    private void readFiles() throws IOException {
         String DIRECTORY_PATH = folderPathField.getText();
         File folder = new File(DIRECTORY_PATH);
         File[] listOfFiles = folder.listFiles();
@@ -47,7 +47,7 @@ public class ImportTabController {
                         } else {
                             screen.setText(screen.getText() + "\n" + file.getName());
                         }
-                        ArrayList<Report> reports = App.getReader().extractData(file.getPath(), file.getName());
+                        ArrayList<Report> reports = App.getParser().extractData(file.toPath(), file.getName());
                         // TODO: Error checking on reports before adding to reportLog
                         App.getReportLog().addReport(reports);
                     }

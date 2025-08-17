@@ -1,18 +1,21 @@
 package shrunken.rok.reportreader;
 
+import java.time.Instant;
+
 import javafx.beans.property.SimpleDoubleProperty;
 import javafx.beans.property.SimpleIntegerProperty;
 import javafx.beans.property.SimpleStringProperty;
 
 public class ReportSummary {
-    private SimpleStringProperty myCmdrPair, oppCmdrPair, date;
+    private SimpleStringProperty myCmdrPair, oppCmdrPair, formattedDate;
     private SimpleIntegerProperty myDeadAndSevs, myKP, oppDeadAndSevs, oppKP;
     private SimpleDoubleProperty ratio, KPRatio;
+    private Instant date;
 
     public ReportSummary() {
         this.myCmdrPair = new SimpleStringProperty(" ");
         this.oppCmdrPair = new SimpleStringProperty(" ");
-        this.date = new SimpleStringProperty(" ");
+        this.formattedDate = new SimpleStringProperty(" ");
         this.myDeadAndSevs = new SimpleIntegerProperty(0);
         this.myKP = new SimpleIntegerProperty(0);
         this.oppDeadAndSevs = new SimpleIntegerProperty(0);
@@ -21,8 +24,7 @@ public class ReportSummary {
         this.KPRatio = new SimpleDoubleProperty(0);
     }
 
-    public ReportSummary(String date, String myCmdrPair, int myDeadAndSevs, int myKP, String oppCmdrPair, int oppDeadAndSevs, int oppKP, double ratio, double KPRatio) {
-        this.date = new SimpleStringProperty(date);
+    public ReportSummary(String myCmdrPair, int myDeadAndSevs, int myKP, String oppCmdrPair, int oppDeadAndSevs, int oppKP, double ratio, double KPRatio, Instant date) {
         this.myCmdrPair = new SimpleStringProperty(myCmdrPair);
         this.myDeadAndSevs = new SimpleIntegerProperty(myDeadAndSevs);
         this.myKP = new SimpleIntegerProperty(myKP);
@@ -31,11 +33,13 @@ public class ReportSummary {
         this.oppKP = new SimpleIntegerProperty(oppKP);
         this.ratio = new SimpleDoubleProperty(ratio);
         this.KPRatio = new SimpleDoubleProperty(KPRatio);
+        this.formattedDate = new SimpleStringProperty(date.toString());
+        this.date = date;
     }
 
     // Getters
-    public String getDate() {
-        return this.date.get();
+    public String getFormattedDate() {
+        return this.formattedDate.get();
     }
     public String getMyCmdrPair() {
         return this.myCmdrPair.get();
@@ -61,10 +65,14 @@ public class ReportSummary {
     public double getKPRatio() {
         return this.KPRatio.get();
     }
+    public Instant getDate() {
+        return this.date;
+    }
 
     // Setters
-    public void setDate(String date) {
-        this.date.set(date);
+    public void setDate(Instant date) {
+        this.date = date;
+        this.formattedDate.set(date.toString());
     }
     public void setMyCmdrPair(String myCmdrPair) {
         this.myCmdrPair.set(myCmdrPair);
