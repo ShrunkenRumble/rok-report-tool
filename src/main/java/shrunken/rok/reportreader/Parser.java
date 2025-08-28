@@ -17,6 +17,7 @@ import java.util.Scanner;
 
 public class Parser {
     private Map<String, String> hIDMap;
+    private static final int MAX_KEY_LEN = 256;
 
     public Parser() {
         hIDMap = new HashMap<String, String>();
@@ -71,6 +72,12 @@ public class Parser {
             int keyLen = toUInt(data, pos);
             pos += 4;
 
+            if (keyLen <= 0 || keyLen > MAX_KEY_LEN || pos + keyLen > n) {
+                // forward one byte and try again
+                pos = start + 1; 
+                continue;
+            }
+
             // Read key bytes
             if (keyLen < 0 || pos + keyLen > n) break;
             String key = new String(data, pos, keyLen);
@@ -122,13 +129,14 @@ public class Parser {
                     }
                 }
                 // Value is boolean
-                case 0x05: {
-                    value = Boolean.TRUE;
+                case 0x01: {
+                    int b = data[pos++] & 0xFF;
+                    value = (b != 0);
                     break;
                 }
                 default: {
                     // Unknown type. Try resync at the next 0x04
-                    value = "[Unknown type 0x" + Integer.toHexString(type) + " at 0x" + Integer.toHexString(pos - 1) + "]";
+                    value = "[Unknown type 0x" + Integer.toHexString(type) + " at 0x" + "]";
                     break;
                 }
             }
