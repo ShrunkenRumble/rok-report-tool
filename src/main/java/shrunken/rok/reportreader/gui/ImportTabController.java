@@ -48,8 +48,10 @@ public class ImportTabController {
                             screen.setText(screen.getText() + "\n" + file.getName());
                         }
                         ArrayList<Report> reports = App.getParser().extractData(file.toPath(), file.getName());
-                        // TODO: Error checking on reports before adding to reportLog
-                        App.getReportLog().addReport(reports);
+                        
+                        if (reports != null && !reports.isEmpty()) {
+                            App.getReportLog().addReport(reports);
+                        }
                     }
                 }
             }

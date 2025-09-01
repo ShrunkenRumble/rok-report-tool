@@ -150,20 +150,41 @@ public class Parser {
 
         // Number of battles in a report can be determined based on occurrences of "Max"
         int numBattles = (reportContents.get("Max").size() / 2) - 1;
-        String reportID = filename;
+        String reportID = reportContents.get("id").get(0).toString();
+        String reportType = " ";
         Report report;
         ArrayList<Report> reports = new ArrayList<>();
 
-
+        // Check report type
+        if (reportContents.containsKey("IsRally")) {
+            if (reportContents.get("IsRally").get(0).toString().equals("true")) {
+                reportType = "Rally";
+            } else {
+                reportType = "Garrison";
+            }
+        } else {
+            // Check if open field battle is present
+            if (reportContents.containsKey("OOv") || reportContents.containsKey("Dead") || reportContents.containsKey("SOv")) {
+                reportType = "Open Field";
+            } else {
+                // If no open field battles and not rally/garr then don't process
+                return null;
+            }
+        }
+    
         int myUnits_sum = 0, myHeals_sum = 0, myDead_sum = 0, mySev_sum = 0, mySlight_sum = 0, myRemaining_sum = 0, myKP_sum = 0, myPowerLoss_sum = 0;
         int oppUnits_sum = 0, oppHeals_sum = 0, oppDead_sum = 0, oppSev_sum = 0, oppSlight_sum = 0, oppRemaining_sum = 0, oppKP_sum = 0, oppPowerLoss_sum = 0;
         
         String myPrimCmdr = getHeroID(reportContents.get("HId").get(0).toString());
         String mySecCmdr = getHeroID(reportContents.get("HId2").get(0).toString());
 
-        // Verify heals, deaths, commander ids
         // Add data from each report to the report log
         for (int i = 0; i < numBattles; i++) {
+            // Check if battle is against barbarians, skip if so
+            if (reportContents.get("HId2").get(1 + (i * 2)).toString().equals("0.0")) {
+                continue;
+            }
+
             String oppPrimCmdr = getHeroID(reportContents.get("HId").get(1 + (i * 2)).toString());
             String oppSecCmdr = getHeroID(reportContents.get("HId2").get(1 + (i * 2)).toString());
 
@@ -205,13 +226,12 @@ public class Parser {
 
             report = new Report(myPrimCmdr, mySecCmdr, oppPrimCmdr, oppSecCmdr, myUnits, myHeals, myDead, 
                                 mySev, mySlight, myRemaining, myKP, myPowerLoss, oppUnits, oppHeals, oppDead, 
-                                oppSev, oppSlight, oppRemaining, oppKP, oppPowerLoss, reportID + "-" + String.valueOf(i), (Instant) reportContents.get("time").get(0));
+                                oppSev, oppSlight, oppRemaining, oppKP, oppPowerLoss, reportType, reportID + "-" + String.valueOf(i), (Instant) reportContents.get("time").get(0));
             reports.add(report);
-            
         }
         report = new Report(myPrimCmdr, mySecCmdr, "-", "-", myUnits_sum, myHeals_sum, myDead_sum, 
                             mySev_sum, mySlight_sum, myRemaining_sum, myKP_sum, myPowerLoss_sum, oppUnits_sum, oppHeals_sum, oppDead_sum, 
-                            oppSev_sum, oppSlight_sum, oppRemaining_sum, oppKP_sum, oppPowerLoss_sum, reportID + "-SUM", (Instant) reportContents.get("time").get(0));
+                            oppSev_sum, oppSlight_sum, oppRemaining_sum, oppKP_sum, oppPowerLoss_sum, reportType, reportID + "-SUM", (Instant) reportContents.get("time").get(0));
         reports.add(report);
         return reports;
     }

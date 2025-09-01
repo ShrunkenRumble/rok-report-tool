@@ -6,7 +6,7 @@ import javafx.beans.property.SimpleIntegerProperty;
 import javafx.beans.property.SimpleStringProperty;
 
 public class Report {
-    private SimpleStringProperty myCmdrPair, myPrimCmdr, mySecCmdr, oppCmdrPair, oppPrimCmdr, oppSecCmdr, id, formattedDate;
+    private SimpleStringProperty myCmdrPair, myPrimCmdr, mySecCmdr, oppCmdrPair, oppPrimCmdr, oppSecCmdr, type, id, formattedDate;
     private SimpleIntegerProperty myUnits, myHeals, myDead, mySev, mySlight, myRemaining, myKP, myPowerLoss;
     private SimpleIntegerProperty oppUnits, oppHeals, oppDead, oppSev, oppSlight, oppRemaining, oppKP, oppPowerLoss;
     private Instant date;
@@ -18,13 +18,14 @@ public class Report {
         this.oppCmdrPair = new SimpleStringProperty(" ");
         this.oppPrimCmdr = new SimpleStringProperty(" ");
         this.oppSecCmdr = new SimpleStringProperty(" ");
+        this.type = new SimpleStringProperty(" ");
         this.id = new SimpleStringProperty(" ");
         this.formattedDate = new SimpleStringProperty(" ");
     }
 
     public Report(String myPrimCmdr, String mySecCmdr, String oppPrimCmdr, String oppSecCmdr, int myUnits,
                     int myHeals, int myDead, int mySev, int mySlight, int myRemaining, int myKP, int myPowerLoss, int oppUnits, 
-                    int oppHeals, int oppDead, int oppSev, int oppSlight, int oppRemaining, int oppKP, int oppPowerLoss, String id, Instant date) {
+                    int oppHeals, int oppDead, int oppSev, int oppSlight, int oppRemaining, int oppKP, int oppPowerLoss, String type, String id, Instant date) {
         this.myPrimCmdr = new SimpleStringProperty(myPrimCmdr);
         this.mySecCmdr = new SimpleStringProperty(mySecCmdr);
         this.oppPrimCmdr = new SimpleStringProperty(oppPrimCmdr);
@@ -48,6 +49,7 @@ public class Report {
         this.id = new SimpleStringProperty(id);
         this.myCmdrPair = new SimpleStringProperty(myPrimCmdr + " / " + mySecCmdr);
         this.oppCmdrPair = new SimpleStringProperty(oppPrimCmdr + " / " + oppSecCmdr);
+        this.type = new SimpleStringProperty(type);
         this.formattedDate = new SimpleStringProperty(date.toString());
         this.date = date;
     }
@@ -122,6 +124,9 @@ public class Report {
     public int getOppPowerLoss() {
         return this.oppPowerLoss.get();
     }
+    public String getType() {
+        return this.type.get();
+    }
     public String getId() {
         return this.id.get();
     }
@@ -189,6 +194,9 @@ public class Report {
     }
     public void setOppPowerLoss(int oppPowerLoss) {
         this.oppPowerLoss = new SimpleIntegerProperty(oppPowerLoss);
+    }
+    public void setType(String type) {
+        this.type = new SimpleStringProperty(type);
     }
     public void setId(String id) {
         this.id = new SimpleStringProperty(id);
