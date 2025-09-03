@@ -10,7 +10,7 @@
 <?import javafx.scene.layout.HBox?>
 <?import javafx.scene.layout.VBox?>
 
-<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="690.0" prefWidth="1120.0" xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1" fx:controller="shrunken.rok.reportreader.gui.ImportTabController">
+<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="690.0" prefWidth="1120.0" xmlns="http://javafx.com/javafx/23" xmlns:fx="http://javafx.com/fxml/1" fx:controller="shrunken.rok.reportreader.gui.ImportTabController">
    <children>
       <SplitPane dividerPositions="0.4330849478390461" layoutX="78.0" layoutY="70.0" prefHeight="267.0" prefWidth="490.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
         <items>
@@ -35,7 +35,8 @@
                                     <Insets />
                                  </HBox.margin>
                               </Button>
-                              <Button mnemonicParsing="false" onAction="#readFiles" prefHeight="28.0" prefWidth="260.0" text="Submit" />
+                              <Button fx:id="startButton" mnemonicParsing="false" onAction="#readFiles" prefHeight="28.0" prefWidth="260.0" text="Start" />
+                              <Button fx:id="stopButton" mnemonicParsing="false" onAction="#stopMonitoring" prefHeight="28.0" prefWidth="260.0" text="Stop" />
                            </children>
                            <VBox.margin>
                               <Insets />
