@@ -1,8 +1,8 @@
 package shrunken.rok.reportreader.gui;
 
 import java.io.File;
+import java.nio.file.Files;
 import java.nio.file.Path;
-import java.time.Duration;
 import java.util.ArrayList;
 
 import javafx.application.Platform;
@@ -20,14 +20,12 @@ public class ImportTabController {
     @FXML Label screen;
     @FXML Button startButton;
     @FXML Button stopButton;
-
-    private MailCacheMonitor monitor;
-    private boolean monitorActive;
+    private MailCacheMonitor cacheMonitor;
 
     @FXML
     private void openExplorer() {
         DirectoryChooser dirChooser = new DirectoryChooser();
-        dirChooser.setTitle("Open Reports Folder");
+        dirChooser.setTitle("Open Mailcache Folder");
         File selectedDir = dirChooser.showDialog(App.getStage());
         if (selectedDir != null) folderPathField.setText(selectedDir.getAbsolutePath());
     }
@@ -35,24 +33,15 @@ public class ImportTabController {
     @FXML
     private void readFiles() {
         try {
-            Path src = Path.of(folderPathField.getText().trim());
-            if (!src.toFile().isDirectory()) {
-                log("Path is not a directory: " + src);
+            Path mailFolder = Path.of(folderPathField.getText().trim());
+            if (!Files.isDirectory(mailFolder)) {
+                log("Path is not a directory: " + mailFolder);
                 return;
             }
-            Path dst = src.resolve("reports"); // keep your existing convention
-            stopMonitoring(); // in case it's already running
-
-            monitor = new MailCacheMonitor(
-                src,
-                dst,
-                Duration.ofMillis(300),
-                this::log,
-                this::onStableFile // callback when a file is safe to process
-            );
-            monitorActive = true;
-            startButton.disableProperty();
-            monitor.start();
+            stopMonitoring();
+            startButton.disableProperty().set(true);
+            cacheMonitor = new MailCacheMonitor(mailFolder);
+            cacheMonitor.start();
         } catch (Exception ex) {
             log("Start error: " + ex.getMessage());
         }
@@ -60,41 +49,34 @@ public class ImportTabController {
 
     @FXML
     private void stopMonitoring() {
-        if (monitor != null) {
-            monitor.stop();
-            startButton.disableProperty().set(true);
-            monitorActive = false;
-            monitor = null;
+        if (cacheMonitor != null) {
+            cacheMonitor.close();
+            cacheMonitor = null;
         }
     }
 
-    /** Called on a background thread when a file is stable and has been copied. */
-    private void onStableFile(Path file) {
+    private void onStableFileCopyReady(Path copiedFile) {
         try {
-            // Avoid re-importing files we already logged
-            if (App.getReportLog().getFilesRead().contains(file.getFileName().toString())) return;
+            String name = copiedFile.getFileName().toString();
+            if (App.getReportLog().getFilesRead().contains(name)) return;
 
-            ArrayList<Report> reports = App.getParser().extractData(file, file.getFileName().toString());
+            ArrayList<Report> reports = App.getParser().extractData(copiedFile, name);
             if (reports != null && !reports.isEmpty()) {
                 App.getReportLog().addReport(reports);
-                log("Imported: " + file.getFileName() + " (" + reports.size() + ")");
+                log("Imported: " + name + " (" + reports.size() + ")");
             }
         } catch (Exception e) {
-            log("Import error for " + file.getFileName() + ": " + e.getMessage());
+            log("Import error for " + copiedFile.getFileName() + ": " + e.getMessage());
         }
     }
 
-    /** Safe UI logging from any thread. */
     private void log(String msg) {
         Platform.runLater(() -> {
             String cur = screen.getText();
-            if (cur == null || cur.isEmpty()) screen.setText(msg);
-            else screen.setText(cur + "\n" + msg);
+            screen.setText((cur == null || cur.isEmpty()) ? msg : (cur + "\n" + msg));
         });
     }
 
-    /** Call from your Application.stop() to ensure clean shutdown. */
-    public void shutdown() {
-        stopMonitoring();
-    }
+    /** Call from Application.stop() to clean up. */
+    public void shutdown() { stopMonitoring(); }
 }

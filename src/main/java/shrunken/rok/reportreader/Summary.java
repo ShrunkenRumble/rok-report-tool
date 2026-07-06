@@ -6,13 +6,13 @@ import javafx.beans.property.SimpleDoubleProperty;
 import javafx.beans.property.SimpleIntegerProperty;
 import javafx.beans.property.SimpleStringProperty;
 
-public class ReportSummary {
+public class Summary {
     private SimpleStringProperty myCmdrPair, oppCmdrPair, formattedDate;
     private SimpleIntegerProperty myDeadAndSevs, myKP, oppDeadAndSevs, oppKP;
     private SimpleDoubleProperty ratio, KPRatio;
     private Instant date;
 
-    public ReportSummary() {
+    public Summary() {
         this.myCmdrPair = new SimpleStringProperty(" ");
         this.oppCmdrPair = new SimpleStringProperty(" ");
         this.formattedDate = new SimpleStringProperty(" ");
@@ -24,7 +24,7 @@ public class ReportSummary {
         this.KPRatio = new SimpleDoubleProperty(0);
     }
 
-    public ReportSummary(String myCmdrPair, int myDeadAndSevs, int myKP, String oppCmdrPair, int oppDeadAndSevs, int oppKP, double ratio, double KPRatio, Instant date) {
+    public Summary(String myCmdrPair, int myDeadAndSevs, int myKP, String oppCmdrPair, int oppDeadAndSevs, int oppKP, double ratio, double KPRatio, Instant date) {
         this.myCmdrPair = new SimpleStringProperty(myCmdrPair);
         this.myDeadAndSevs = new SimpleIntegerProperty(myDeadAndSevs);
         this.myKP = new SimpleIntegerProperty(myKP);

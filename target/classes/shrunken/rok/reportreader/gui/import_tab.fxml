@@ -35,7 +35,7 @@
                                     <Insets />
                                  </HBox.margin>
                               </Button>
-                              <Button fx:id="startButton" mnemonicParsing="false" onAction="#readFiles" prefHeight="28.0" prefWidth="260.0" text="Start" />
+                              <Button fx:id="startButton" mnemonicParsing="false" onAction="#readFiles" prefHeight="28.0" prefWidth="260.0" text="Start Monitoring" />
                               <Button fx:id="stopButton" mnemonicParsing="false" onAction="#stopMonitoring" prefHeight="28.0" prefWidth="260.0" text="Stop" />
                            </children>
                            <VBox.margin>
